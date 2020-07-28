@@ -9,29 +9,45 @@ namespace TodoApi.Models
 {
     public class OrderDetail
     {
-       
+        [DefaultValue("")]
+        [Column(TypeName = ColumnTypes.NVarchar10)]
         public string No { get; set; }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DefaultValue(0)]
         public int ProNo { get; set; }
        
+        [DefaultValue("")]
+        [Column(TypeName = ColumnTypes.NVarchar10)]
         public string MaterialNo { get; set; }
        
+        [DefaultValue(0)]
         public double Amount { get; set; }
        
+        [DefaultValue("")]
+        [Column(TypeName = ColumnTypes.NVarchar10)]
         public string Unit { get; set; }
        
+        [DefaultValue(0)]
         public int SortNo { get; set; }
-       
+
+        [DefaultValue("")]
+        [Column(TypeName = ColumnTypes.NVarchar2000)]
         public string Comment { get; set; }
-        
+
+        [DefaultValue("")]
+        [Column(TypeName = ColumnTypes.NVarchar100)]
         public string CreatNo { get; set; }
-        
+
+        [DefaultValue(typeof(DateTime), "0001-01-01")]
         public DateTime CreatDate { get; set; }
-        
+
+        [DefaultValue("")]
+        [Column(TypeName = ColumnTypes.NVarchar100)]
         public string UpdateNo { get; set; }
-       
+
+        [DefaultValue(typeof(DateTime), "0001-01-01")]
         public DateTime UpdaeDate { get; set; }
     }
 }

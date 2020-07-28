@@ -15,11 +15,19 @@ namespace TodoApi.Models
         }
 
         public DbSet<Order> orders { get; set; }
+        public DbSet<OrderDetail> orderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Order>();
+            modelBuilder.Entity<Order>()
+                .HasIndex(o => o.No)
+                .IsUnique();
 
+            modelBuilder.Entity<OrderDetail>()
+                .HasIndex(o => o.ProNo)
+                .IsUnique();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

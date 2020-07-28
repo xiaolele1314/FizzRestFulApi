@@ -34,6 +34,8 @@ namespace TodoApi
             services.AddDbContext<OrderContext>(optios => optios.UseMySQL(Configuration.GetConnectionString("dbconn")));
             services.AddMvc(options => { options.EnableEndpointRouting = false; })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+
             services.AddControllers();
 
             
@@ -63,6 +65,7 @@ namespace TodoApi
             });*/
 
             app.UseMvc();
+
             context.Database.EnsureCreated();
 
         }
