@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\TodoApi",
+    "\\TodoApi\\bin",
+    "\\TodoApi\\bin\\Release",
+    "\\TodoApi\\bin\\Release\\netcoreapp3.1",
+    "\\TodoApi\\Controllers",
+    "\\TodoApi\\Models",
+    "\\TodoApi\\obj",
+    "\\TodoApi\\Properties"
+  ],
+  "SelectedNode": "\\TodoApi\\Startup.cs",
+  "PreviewInSolutionExplorer": false
+}
