@@ -75,15 +75,18 @@ namespace TodoApi.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MaterialNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("No")
+                        .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("SortNo")
                         .HasColumnType("int");
 
                     b.Property<string>("Unit")
+                        .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("UpdaeDate")

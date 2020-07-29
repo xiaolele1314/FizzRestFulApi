@@ -11,22 +11,27 @@ namespace TodoApi.Models
     {
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar10)]
+        [Required]
         public string No { get; set; }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DefaultValue(0)]
+        [Required]
         public int ProNo { get; set; }
        
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar10)]
+        [Required]
         public string MaterialNo { get; set; }
        
         [DefaultValue(0)]
+        [Required]
         public double Amount { get; set; }
        
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar10)]
+        [Required]
         public string Unit { get; set; }
        
         [DefaultValue(0)]

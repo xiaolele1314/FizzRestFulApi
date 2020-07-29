@@ -21,9 +21,11 @@ namespace TodoApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            users = new List<User>();
         }
 
         public IConfiguration Configuration { get; }
+        public static List<User> users { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -53,9 +55,9 @@ namespace TodoApi
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            /*app.UseHttpsRedirection();
 
-            /*app.UseRouting();
+            app.UseRouting();
 
             app.UseAuthorization();
 

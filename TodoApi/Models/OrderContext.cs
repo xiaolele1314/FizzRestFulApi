@@ -16,6 +16,7 @@ namespace TodoApi.Models
 
         public DbSet<Order> orders { get; set; }
         public DbSet<OrderDetail> orderDetails { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

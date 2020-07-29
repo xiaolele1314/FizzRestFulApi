@@ -14,10 +14,10 @@ namespace TodoApi.Migrations
                 {
                     ProNo = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    No = table.Column<string>(type: "nvarchar(10)", nullable: true),
-                    MaterialNo = table.Column<string>(type: "nvarchar(10)", nullable: true),
+                    No = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    MaterialNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     Amount = table.Column<double>(nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(10)", nullable: true),
+                    Unit = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     SortNo = table.Column<int>(nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true),
                     CreatNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
