@@ -25,8 +25,15 @@ namespace TodoApi.Models
                 .IsUnique();
 
             modelBuilder.Entity<OrderDetail>()
+                .HasOne(d => d.order)
+                .WithMany(o => o.orderDetails)
+                .HasForeignKey(d => d.No);
+
+            modelBuilder.Entity<OrderDetail>()
                 .HasIndex(o => o.ProNo)
                 .IsUnique();
+                
+                
 
             base.OnModelCreating(modelBuilder);
         }

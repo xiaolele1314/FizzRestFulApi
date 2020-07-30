@@ -9,7 +9,7 @@ using TodoApi.Models;
 namespace TodoApi.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20200729085019_FirstMigration")]
+    [Migration("20200730041637_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,10 +99,21 @@ namespace TodoApi.Migrations
 
                     b.HasKey("ProNo");
 
+                    b.HasIndex("No");
+
                     b.HasIndex("ProNo")
                         .IsUnique();
 
                     b.ToTable("orderDetails");
+                });
+
+            modelBuilder.Entity("TodoApi.Models.OrderDetail", b =>
+                {
+                    b.HasOne("TodoApi.Models.Order", "order")
+                        .WithMany("orderDetails")
+                        .HasForeignKey("No")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -25,6 +25,8 @@ namespace TodoApi
         }
 
         public IConfiguration Configuration { get; }
+
+        //内存中创建用户
         public static List<User> users { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -45,7 +47,7 @@ namespace TodoApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,OrderContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OrderContext context)
         {
             if (env.IsDevelopment())
             {
@@ -55,9 +57,9 @@ namespace TodoApi
                 app.UseHsts();
             }
 
-            /*app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-            app.UseRouting();
+            /*app.UseRouting();
 
             app.UseAuthorization();
 

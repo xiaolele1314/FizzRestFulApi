@@ -51,6 +51,8 @@ namespace TodoApi.Models
         [DefaultValue(typeof(DateTime), "0001-01-01")]
         public DateTime UpdaeDate { get; set; }
 
+
+        public List<OrderDetail> orderDetails { get; set; }
         
         //public OrderDetail Detail { get; set; }
     }

@@ -9,6 +9,25 @@ namespace TodoApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "orders",
+                columns: table => new
+                {
+                    No = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    ClientName = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    SignDate = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true),
+                    CreatNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    CreatDate = table.Column<DateTime>(nullable: false),
+                    UpdateNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    UpdaeDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_orders", x => x.No);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "orderDetails",
                 columns: table => new
                 {
@@ -28,26 +47,18 @@ namespace TodoApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_orderDetails", x => x.ProNo);
+                    table.ForeignKey(
+                        name: "FK_orderDetails_orders_No",
+                        column: x => x.No,
+                        principalTable: "orders",
+                        principalColumn: "No",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "orders",
-                columns: table => new
-                {
-                    No = table.Column<string>(type: "nvarchar(10)", nullable: false),
-                    ClientName = table.Column<string>(type: "nvarchar(10)", nullable: false),
-                    SignDate = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true),
-                    CreatNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    CreatDate = table.Column<DateTime>(nullable: false),
-                    UpdateNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    UpdaeDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_orders", x => x.No);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_orderDetails_No",
+                table: "orderDetails",
+                column: "No");
 
             migrationBuilder.CreateIndex(
                 name: "IX_orderDetails_ProNo",

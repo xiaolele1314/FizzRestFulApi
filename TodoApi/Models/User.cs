@@ -17,7 +17,6 @@ namespace TodoApi.Models
         }
         public int id { get; set; }
 
-      
         public  List<string> no { get; set; }
         public string name { get; set; }
         

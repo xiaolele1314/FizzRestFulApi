@@ -12,6 +12,7 @@ namespace TodoApi.Models
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar10)]
         [Required]
+        [ForeignKey("No")]
         public string No { get; set; }
 
         [Key]
@@ -54,5 +55,7 @@ namespace TodoApi.Models
 
         [DefaultValue(typeof(DateTime), "0001-01-01")]
         public DateTime UpdaeDate { get; set; }
+
+        public Order order { get; set; }
     }
 }

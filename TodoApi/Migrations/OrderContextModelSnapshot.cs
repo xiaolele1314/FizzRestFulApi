@@ -97,10 +97,21 @@ namespace TodoApi.Migrations
 
                     b.HasKey("ProNo");
 
+                    b.HasIndex("No");
+
                     b.HasIndex("ProNo")
                         .IsUnique();
 
                     b.ToTable("orderDetails");
+                });
+
+            modelBuilder.Entity("TodoApi.Models.OrderDetail", b =>
+                {
+                    b.HasOne("TodoApi.Models.Order", "order")
+                        .WithMany("orderDetails")
+                        .HasForeignKey("No")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
