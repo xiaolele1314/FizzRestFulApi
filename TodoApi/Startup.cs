@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
 using Google.Protobuf.WellKnownTypes;
+using TodoApi.Service;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace TodoApi
 {
@@ -38,7 +40,7 @@ namespace TodoApi
             services.AddDbContext<OrderContext>(optios => optios.UseMySQL(Configuration.GetConnectionString("dbconn")));
             services.AddMvc(options => { options.EnableEndpointRouting = false; })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
+            //services.TryAddSingleton<IOrderService, OrderService>();
 
             services.AddControllers();
 
