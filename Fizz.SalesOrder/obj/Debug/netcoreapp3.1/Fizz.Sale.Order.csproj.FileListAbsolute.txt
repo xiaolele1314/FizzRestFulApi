@@ -1,0 +1,6 @@
+C:\Users\zhangle\source\repos\TodoApi\TodoApi\obj\Debug\netcoreapp3.1\Fizz.Sale.Order.csprojAssemblyReference.cache
+C:\Users\zhangle\source\repos\TodoApi\TodoApi\obj\Debug\netcoreapp3.1\Fizz.Sale.Order.csproj.ResolveComReference.cache
+C:\Users\zhangle\source\repos\TodoApi\TodoApi\obj\Debug\netcoreapp3.1\Fizz.Sale.Order.AssemblyInfoInputs.cache
+C:\Users\zhangle\source\repos\TodoApi\TodoApi\obj\Debug\netcoreapp3.1\Fizz.Sale.Order.AssemblyInfo.cs
+C:\Users\zhangle\source\repos\TodoApi\TodoApi\obj\Debug\netcoreapp3.1\Fizz.Sale.Order.csproj.CoreCompileInputs.cache
+C:\Users\zhangle\source\repos\TodoApi\TodoApi\obj\Debug\netcoreapp3.1\Fizz.Sale.Order.MvcApplicationPartsAssemblyInfo.cache
