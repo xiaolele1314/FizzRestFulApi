@@ -9,12 +9,9 @@ using System.Threading.Tasks;
 namespace Fizz.SalesOrder.Models
 {
 
-    public enum State { Pending = 0 , Dispose = 1, Cancel = 2, Finish = 3 };
-
-    public class Order
+    [Table("order")]
+    public class Order:SalesCommonBase
     {
-       
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DefaultValue("")]
@@ -30,26 +27,13 @@ namespace Fizz.SalesOrder.Models
         [DefaultValue(typeof(DateTime), "0001-01-01")]
         public DateTime SignDate { get; set; }
         
-        [DefaultValue((int)State.Pending)]
+        [DefaultValue((int)OrderStatusEnum.Pending)]
         public int Status { get; set; }
 
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar2000)]
         public string Comment { get; set; }
 
-        [DefaultValue("")]
-        [Column(TypeName = ColumnTypes.NVarchar100)]
-        public string CreatNo { get; set; }
-
-        [DefaultValue(typeof(DateTime),"0001-01-01")]
-        public DateTime CreatDate { get; set; }
-
-        [DefaultValue("")]
-        [Column(TypeName = ColumnTypes.NVarchar100)]
-        public string UpdateNo { get; set; }
-
-        [DefaultValue(typeof(DateTime), "0001-01-01")]
-        public DateTime UpdaeDate { get; set; }
 
 
         public List<OrderDetail> OrderDetails { get; set; }

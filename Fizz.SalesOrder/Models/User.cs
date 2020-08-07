@@ -13,10 +13,10 @@ namespace Fizz.SalesOrder.Models
         
         public User()
         {
-            No = new List<string>();
+            OrderNos = new List<string>();
         }
 
-        public  List<string> No { get; set; }
+        public  List<string> OrderNos { get; set; }
         public string Name { get; set; }
         
     }

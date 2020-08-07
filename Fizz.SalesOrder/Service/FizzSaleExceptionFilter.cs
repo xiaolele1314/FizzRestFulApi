@@ -18,7 +18,7 @@ namespace Fizz.SalesOrder.Service
                 {
                     Content = context.Exception.Message,
                     StatusCode = StatusCodes.Status400BadRequest,
-                    ContentType = "text/html;charset=utf-8"
+                    ContentType = "application/json;charset=utf-8"
                 };
             }
             context.ExceptionHandled = true;

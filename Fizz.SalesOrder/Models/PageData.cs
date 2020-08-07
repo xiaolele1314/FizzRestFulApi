@@ -7,9 +7,9 @@ namespace Fizz.SalesOrder.Models
 {
     public class PageData<T>
     {
-        public int PageCount { get; set; }
+        public decimal PageCount { get; set; }
         public int PageNo { get; set; }
-        public T PageItems { get; set; }
+        public List<T> PageItems { get; set; }
       
     }
 }

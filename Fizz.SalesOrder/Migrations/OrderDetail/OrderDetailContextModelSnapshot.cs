@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Fizz.SalesOrder.Migrations
+namespace Fizz.SalesOrder.Migrations.OrderDetail
 {
-    [DbContext(typeof(OrderContext))]
-    partial class OrderContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(OrderDetailContext))]
+    partial class OrderDetailContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -50,10 +50,7 @@ namespace Fizz.SalesOrder.Migrations
 
                     b.HasKey("No");
 
-                    b.HasIndex("No")
-                        .IsUnique();
-
-                    b.ToTable("orders");
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
@@ -82,9 +79,6 @@ namespace Fizz.SalesOrder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("OrderNo")
-                        .HasColumnType("nvarchar(10)");
-
                     b.Property<int>("SortNo")
                         .HasColumnType("int");
 
@@ -100,16 +94,21 @@ namespace Fizz.SalesOrder.Migrations
 
                     b.HasKey("ProNo");
 
-                    b.HasIndex("OrderNo");
+                    b.HasIndex("No");
 
-                    b.ToTable("OrderDetail");
+                    b.HasIndex("ProNo")
+                        .IsUnique();
+
+                    b.ToTable("orderDetails");
                 });
 
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
                 {
                     b.HasOne("Fizz.SalesOrder.Models.Order", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("OrderNo");
+                        .HasForeignKey("No")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

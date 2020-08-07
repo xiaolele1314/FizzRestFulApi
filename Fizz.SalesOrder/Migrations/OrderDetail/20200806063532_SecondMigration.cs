@@ -2,29 +2,29 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using MySql.Data.EntityFrameworkCore.Metadata;
 
-namespace Fizz.SalesOrder.Migrations
+namespace Fizz.SalesOrder.Migrations.OrderDetail
 {
-    public partial class FirstMigration : Migration
+    public partial class SecondMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "orders",
+                name: "Order",
                 columns: table => new
                 {
                     No = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    CreatSaleNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    CreatSaleDate = table.Column<DateTime>(nullable: false),
+                    UpdateSaleNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    UpdaeSaleDate = table.Column<DateTime>(nullable: false),
                     ClientName = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     SignDate = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true),
-                    CreatNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    CreatDate = table.Column<DateTime>(nullable: false),
-                    UpdateNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    UpdaeDate = table.Column<DateTime>(nullable: false)
+                    Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_orders", x => x.No);
+                    table.PrimaryKey("PK_Order", x => x.No);
                 });
 
             migrationBuilder.CreateTable(
@@ -33,24 +33,24 @@ namespace Fizz.SalesOrder.Migrations
                 {
                     ProNo = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatSaleNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    CreatSaleDate = table.Column<DateTime>(nullable: false),
+                    UpdateSaleNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    UpdaeSaleDate = table.Column<DateTime>(nullable: false),
                     No = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     MaterialNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     Amount = table.Column<double>(nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     SortNo = table.Column<int>(nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true),
-                    CreatNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    CreatDate = table.Column<DateTime>(nullable: false),
-                    UpdateNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    UpdaeDate = table.Column<DateTime>(nullable: false)
+                    Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_orderDetails", x => x.ProNo);
                     table.ForeignKey(
-                        name: "FK_orderDetails_orders_No",
+                        name: "FK_orderDetails_Order_No",
                         column: x => x.No,
-                        principalTable: "orders",
+                        principalTable: "Order",
                         principalColumn: "No",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -65,12 +65,6 @@ namespace Fizz.SalesOrder.Migrations
                 table: "orderDetails",
                 column: "ProNo",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_orders_No",
-                table: "orders",
-                column: "No",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -79,7 +73,7 @@ namespace Fizz.SalesOrder.Migrations
                 name: "orderDetails");
 
             migrationBuilder.DropTable(
-                name: "orders");
+                name: "Order");
         }
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\zhangle\\source\\repos\\TodoApi\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj": {}
+    "C:\\Users\\zhangle\\source\\repos\\Fizz.SalesOrder\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj": {}
   },
   "projects": {
-    "C:\\Users\\zhangle\\source\\repos\\TodoApi\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj": {
+    "C:\\Users\\zhangle\\source\\repos\\Fizz.SalesOrder\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\zhangle\\source\\repos\\TodoApi\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj",
+        "projectUniqueName": "C:\\Users\\zhangle\\source\\repos\\Fizz.SalesOrder\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj",
         "projectName": "Fizz.SalesOrder",
-        "projectPath": "C:\\Users\\zhangle\\source\\repos\\TodoApi\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj",
+        "projectPath": "C:\\Users\\zhangle\\source\\repos\\Fizz.SalesOrder\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj",
         "packagesPath": "C:\\Users\\zhangle\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\zhangle\\source\\repos\\TodoApi\\Fizz.SalesOrder\\obj\\",
+        "outputPath": "C:\\Users\\zhangle\\source\\repos\\Fizz.SalesOrder\\Fizz.SalesOrder\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "e:\\Microsoft\\Xamarin\\NuGet\\"

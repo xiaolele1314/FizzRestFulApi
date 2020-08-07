@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gMPeQ7rCF9vAtaoRbkpI9vNzfv8cFfmg3yUgJTrQzm91m5NVTOaHLCVIgQcavOL7FJ8iB0K7W3I6n1jC4BmNwg==",
+  "dgSpecHash": "Wrkn0JcwY1w7K/kITI4qFxsBjuy8FXR4HN1WnujJ/ijkk4AJ8t9e94j4oVFQTkUkz1vWHKAidBPvTPrv5q+uUw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\zhangle\\source\\repos\\TodoApi\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj",
+  "projectFilePath": "C:\\Users\\zhangle\\source\\repos\\Fizz.SalesOrder\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\zhangle\\.nuget\\packages\\automapper\\10.0.0\\automapper.10.0.0.nupkg.sha512",
     "C:\\Users\\zhangle\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.0.1\\automapper.extensions.microsoft.dependencyinjection.8.0.1.nupkg.sha512",

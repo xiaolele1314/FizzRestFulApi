@@ -39,7 +39,8 @@ namespace Fizz.SalesOrder
             //services.AddDbContext<TodoContext>(opt =>
             //  opt.UseInMemoryDatabase("TodoList"));
 
-            services.AddDbContext<OrderContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbserver")));
+            services.AddDbContext<OrderContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
+            services.AddDbContext<OrderDetailContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
 
             services.AddMvc(options => { 
                     options.EnableEndpointRouting = false;
@@ -48,6 +49,7 @@ namespace Fizz.SalesOrder
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
 
             //services.AddAutoMapper();
 

@@ -7,7 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace Fizz.SalesOrder.Models
 {
-    public class OrderDetail
+    [Table("orderdetail")]
+    public class OrderDetail:SalesCommonBase
     {
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar10)]
@@ -46,20 +47,6 @@ namespace Fizz.SalesOrder.Models
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar2000)]
         public string Comment { get; set; }
-
-        [DefaultValue("")]
-        [Column(TypeName = ColumnTypes.NVarchar100)]
-        public string CreatNo { get; set; }
-
-        [DefaultValue(typeof(DateTime), "0001-01-01")]
-        public DateTime CreatDate { get; set; }
-
-        [DefaultValue("")]
-        [Column(TypeName = ColumnTypes.NVarchar100)]
-        public string UpdateNo { get; set; }
-
-        [DefaultValue(typeof(DateTime), "0001-01-01")]
-        public DateTime UpdaeDate { get; set; }
 
         public Order Order { get; set; }
     }
