@@ -144,12 +144,12 @@ namespace Fizz.SalesOrder.Extensions
             {
                 Type t = typeof(Order);
                 PropertyInfo[] pi = t.GetProperties();
-                PropertyInfo info = pi.Where(o => o.Name == propertyName).FirstOrDefault();
+                PropertyInfo info = pi.Where(o => o.Name.ToLower() == propertyName.ToLower()).FirstOrDefault();
 
                 //ordersQuery = ordersQuery.OrderBy(o => info.GetValue(o)).AsQueryable();
 
                 ParameterExpression param = Expression.Parameter(typeof(Order), "order");
-                MemberExpression s = Expression.Property(param, typeof(Order).GetProperty(propertyName, BindingFlags.IgnoreCase));
+                MemberExpression s = Expression.Property(param, typeof(Order).GetProperty(info.Name,BindingFlags.IgnoreCase|BindingFlags.Public|BindingFlags.Instance));
                 var lambda = Expression.Lambda<Func<Order, object>>(s, param);
                 ordersQuery = ordersQuery.OrderBy(lambda);
             }

@@ -40,7 +40,7 @@ namespace Fizz.SalesOrder.Controllers
 
         //查询用户所有销售订单
         // GET api/order
-        [HttpPost("get")]
+        [HttpGet("get")]
         public object Get([FromHeader] string userName, [FromQuery] string propertyName, [FromBody]MultipleGetStyleOption getStyleOption, [FromQuery] int pageSize, [FromQuery] int pageNum)
         {
             return _orderService.QueryOrderAll(userName, propertyName, getStyleOption, pageSize, pageNum);
