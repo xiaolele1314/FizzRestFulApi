@@ -29,8 +29,7 @@ namespace Fizz.SalesOrder.Controllers
         // POST api/order
         [HttpPost("{orderNo:int:length(1,10)}")]
         public ResultMes Post([FromHeader] string userName, [FromBody] OrderDetail detail, string orderNo)
-        {
-            
+        { 
             return _detailService.CreatOrderDetails(userName, detail, orderNo);
           
         }
@@ -38,54 +37,58 @@ namespace Fizz.SalesOrder.Controllers
         //查询用户所有销售订单
         // GET api/order
         [HttpGet()]
-        public object Get([FromHeader] string userName, [FromQuery] string orderNo, [FromQuery] int detailNo, [FromQuery] int pageSize, [FromQuery] int pageNum, [FromQuery] int findType)
-        {
-            switch (findType)
-            {
-                case (int)GetTypeEnum.GetAll:
-                    return _detailService.QueryDetailAll(pageSize, pageNum);
-                case (int)GetTypeEnum.GetByKey:
-                    return _detailService.QueryDetailByKey(userName, detailNo, pageSize, pageNum);
-                case (int)GetTypeEnum.GetByUser:
-                    return _detailService.QueryDetailByUser(userName, pageSize, pageNum);
-                case (int)GetTypeEnum.GetByOrder:
-                    return _detailService.QueryDetailByOrder(userName, orderNo, pageSize, pageNum);
-                default:
-                    return new ResultMes
-                    {
-                        Code = 202,
-                        Message = "don't set findType"
-                    };
-            }
-            
+        public object Get([FromQuery] int pageSize, [FromQuery] int pageNum)
+        {  
+            return _detailService.QueryDetailAll(pageSize, pageNum);
         }
 
+        [HttpGet("order/{detailNo}")]
+        public object Get([FromHeader] string userName, int detailNo)
+        {
+              return _detailService.QueryDetailByKey(userName, detailNo);
+        }
 
+        [HttpGet("user")]
+        public object Get([FromHeader] string userName, [FromQuery] int pageSize, [FromQuery] int pageNum)
+        {
+              return _detailService.QueryDetailByUser(userName, pageSize, pageNum);      
+        }
+
+        [HttpGet("{orderNo}")]
+        public object Get([FromHeader] string userName, string orderNo, [FromQuery] int pageSize, [FromQuery] int pageNum)
+        {
+              return _detailService.QueryDetailByOrder(userName, orderNo, pageSize, pageNum);
+        }
 
         //删除用户所有订单和订单明细
         // DELETE api/order
         [HttpDelete()]
-        public ResultMes DeleteUser([FromHeader] string userName, [FromQuery] string orderNo, [FromQuery] int detailNo, [FromQuery] int deleteType)
+        public ResultMes DeleteUser()
         {
-            switch (deleteType)
-            {
-                case (int)DeleteTypeEnum.DeleteAll:
-                    return _detailService.DeleteDetailAll();
-                case (int)DeleteTypeEnum.DeleteByKey:
-                    return _detailService.DeleteDetailByKey(userName, detailNo);
-                case (int)DeleteTypeEnum.DeleteByUser:
-                    return _detailService.DeleteDetailByUser(userName);
-                case (int)DeleteTypeEnum.DeleteByOrder:
-                    return _detailService.DeleteDetailByOrder(userName,orderNo);
-                default:
-                    return new ResultMes
-                    {
-                        Code = 202,
-                        Message = "don't set findType"
-                    };
-            }
+             return _detailService.DeleteDetailAll();
+
         }
 
+        [HttpDelete("order/{detailNo}")]
+        public ResultMes DeleteUser([FromHeader] string userName, int detailNo)
+        {
+             return _detailService.DeleteDetailByKey(userName, detailNo);
+        }
+
+        [HttpDelete("user")]
+        public ResultMes DeleteUser([FromHeader] string userName)
+        {
+
+             return _detailService.DeleteDetailByUser(userName);
+
+        }
+
+        [HttpDelete("{orderNo}")]
+        public ResultMes DeleteUser([FromHeader] string userName,string orderNo)
+        {
+             return _detailService.DeleteDetailByOrder(userName, orderNo);
+
+        }
 
         //更新用户的销售单
         // PUT api/order

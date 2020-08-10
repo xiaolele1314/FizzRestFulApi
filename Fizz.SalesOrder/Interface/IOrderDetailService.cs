@@ -13,7 +13,7 @@ namespace Fizz.SalesOrder.Service
         
         PageData<OrderDetail> QueryDetailByUser(string userName, int pageSize, int pageNum);
         PageData<OrderDetail> QueryDetailAll(int pageSize, int pageNum);
-        PageData<OrderDetail> QueryDetailByKey(string userName, int detailNo, int pageSize, int pageNum);
+        PageData<OrderDetail> QueryDetailByKey(string userName, int detailNo);
         PageData<OrderDetail> QueryDetailByOrder(string userName, string orderNo, int pageSize, int pageNum);
 
         ResultMes DeleteDetailAll();

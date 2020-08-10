@@ -7,14 +7,14 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace Fizz.SalesOrder.Models
 {
-    [Table("orderdetail")]
+    [Table("detail")]
     public class OrderDetail:SalesCommonBase
     {
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar10)]
         [Required]
         [ForeignKey("No")]
-        public string No { get; set; }
+        public string OrderNo { get; set; }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

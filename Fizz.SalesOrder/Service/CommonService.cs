@@ -1,5 +1,6 @@
 ﻿using Fizz.SalesOrder.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace Fizz.SalesOrder.Service
             if (user == null)
             {
                 user = new User { Name = name };
-                user.No = new List<string>();
+                user.OrderNos = new List<string>();
                 UserAddNo(user, no);
                 Startup.users.Add(user);
             }
@@ -50,12 +51,33 @@ namespace Fizz.SalesOrder.Service
         {
             if (null != no)
             {
-                if (!user.No.Contains(no))
-                    user.No.Add(no);
+                if (!user.OrderNos.Contains(no))
+                    user.OrderNos.Add(no);
             }
         }
 
+        public static List<User> InitializeUsers(IServiceCollection services)
+        {
+            IServiceProvider provider = services.BuildServiceProvider();
+            OrderContext orderContext = provider.GetService<OrderContext>();
 
-     
+
+            List<User> users = new List<User> { new User { Name = "fizz" }, new User { Name = "s52" } };
+
+            //查询数据库为user添加no
+            foreach (User user in users)
+            {
+                var orders = orderContext.orders.Where(o => o.CreateUserNo == user.Name).AsNoTracking();
+                foreach (Order order in orders)
+                {
+                    if (!user.OrderNos.Contains(order.No))
+                        user.OrderNos.Add(order.No);
+                }
+            }
+
+            return users;
+        }
+
+
     }
 }

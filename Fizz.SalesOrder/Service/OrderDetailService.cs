@@ -34,7 +34,7 @@ namespace Fizz.SalesOrder.Service
             }
 
             //添加销售订单明细
-            detail.No = orderNo;
+            detail.OrderNo = orderNo;
 
             DateTime now = System.DateTime.Now;
             detail.SetCommonValue(now, userName, now, userName);
@@ -79,7 +79,7 @@ namespace Fizz.SalesOrder.Service
             //获取用户
             User user = CommonService.CreateUser(userName, null);
 
-            var details = _context.orderDetails.Where(o => o.No == orderNo);
+            var details = _context.orderDetails.Where(o => o.OrderNo == orderNo);
             foreach (OrderDetail item in details)
             {
                 _context.orderDetails.Remove(item);
@@ -95,7 +95,7 @@ namespace Fizz.SalesOrder.Service
             //获取用户
             User user = CommonService.CreateUser(userName, null);
 
-            var details = _context.orderDetails.Where(o => user.OrderNos.Contains(o.No));
+            var details = _context.orderDetails.Where(o => user.OrderNos.Contains(o.OrderNo));
             foreach (OrderDetail item in details)
             {
                 _context.orderDetails.Remove(item);
@@ -114,8 +114,8 @@ namespace Fizz.SalesOrder.Service
             {
                 throw new Exception("pageNum error!");
             }
-
-            decimal pageCount = Math.Ceiling((decimal)_context.orderDetails.Count() / pageSize);
+            int count = _context.orderDetails.Count();
+            decimal pageCount = Math.Ceiling((decimal)count / pageSize);
 
             if (pageNum > pageCount)
             {
@@ -123,34 +123,26 @@ namespace Fizz.SalesOrder.Service
             }
             //分页查询
 
-            var orderPages = _context.orderDetails.AsNoTracking().Skip(pageSize * (pageNum - 1)).Take(pageSize).ToList();
-
-            //根据signdate范围查询
-            //DateTime minDate = new DateTime(2015, 4, 23);
-            //DateTime maxDate = new DateTime(2020, 4, 23);
-            //var orders = _context.orders.Where(o => o.ClientName == name && (o.SignDate > minDate && o.SignDate <= maxDate));
+            var orderPages = _context.orderDetails
+                .AsNoTracking()
+                .Skip(pageSize * (pageNum - 1))
+                .Take(pageSize)
+                .ToList();
 
             return new PageData<OrderDetail> { PageNo = pageNum, PageCount = pageCount, PageItems = orderPages };
         }
 
-        public PageData<OrderDetail> QueryDetailByKey(string userName, int detailNo , int pageSize, int pageNum)
+        public PageData<OrderDetail> QueryDetailByKey(string userName, int detailNo )
         {
-
-            pageSize = 1;
-            pageNum = 1;
-            int pageCount = 1;
-
             //获取用户
             User user = CommonService.CreateUser(userName, null);
 
-            var orderPages = _context.orderDetails.AsNoTracking().Where(o => o.ProNo == detailNo).ToList();
+            var orderPages = _context.orderDetails
+                .AsNoTracking()
+                .Where(o => o.ProNo == detailNo)
+                .ToList();
 
-            //根据signdate范围查询
-            //DateTime minDate = new DateTime(2015, 4, 23);
-            //DateTime maxDate = new DateTime(2020, 4, 23);
-            //var orders = _context.orders.Where(o => o.ClientName == name && (o.SignDate > minDate && o.SignDate <= maxDate));
-
-            return new PageData<OrderDetail> { PageNo = pageNum, PageCount = pageCount, PageItems = orderPages };
+            return new PageData<OrderDetail> { PageNo = 1, PageCount = 1, PageItems = orderPages };
         }
 
         public PageData<OrderDetail> QueryDetailByOrder(string userName, string orderNo, int pageSize, int pageNum)
@@ -164,7 +156,7 @@ namespace Fizz.SalesOrder.Service
                 throw new Exception("pageNum error!");
             }
 
-            decimal pageCount = Math.Ceiling((decimal)_context.orderDetails.Where(o => o.No == orderNo).Count() / pageSize);
+            decimal pageCount = Math.Ceiling((decimal)_context.orderDetails.Where(o => o.OrderNo == orderNo).Count() / pageSize);
 
             if (pageNum > pageCount)
             {
@@ -172,12 +164,11 @@ namespace Fizz.SalesOrder.Service
             }
             //分页查询
 
-            var orderPages = _context.orderDetails.AsNoTracking().Where(o => o.No == orderNo).Skip(pageSize * (pageNum - 1)).Take(pageSize).ToList();
-
-            //根据signdate范围查询
-            //DateTime minDate = new DateTime(2015, 4, 23);
-            //DateTime maxDate = new DateTime(2020, 4, 23);
-            //var orders = _context.orders.Where(o => o.ClientName == name && (o.SignDate > minDate && o.SignDate <= maxDate));
+            var orderPages = _context.orderDetails.AsNoTracking()
+                .Where(o => o.OrderNo == orderNo)
+                .Skip(pageSize * (pageNum - 1))
+                .Take(pageSize)
+                .ToList();
 
             return new PageData<OrderDetail> { PageNo = pageNum, PageCount = pageCount, PageItems = orderPages };
         }
@@ -195,7 +186,7 @@ namespace Fizz.SalesOrder.Service
                 throw new Exception("pageNum error!");
             }
 
-            decimal pageCount = Math.Ceiling((decimal)_context.orderDetails.Where(o => user.OrderNos.Contains(o.No)).Count() / pageSize);
+            decimal pageCount = Math.Ceiling((decimal)_context.orderDetails.Where(o => user.OrderNos.Contains(o.OrderNo)).Count() / pageSize);
 
             if(pageNum > pageCount)
             {
@@ -203,12 +194,11 @@ namespace Fizz.SalesOrder.Service
             }
             //分页查询
            
-            var orderPages = _context.orderDetails.AsNoTracking().Where(o => user.OrderNos.Contains(o.No)).Skip(pageSize * (pageNum - 1)).Take(pageSize).ToList();
-
-            //根据signdate范围查询
-            //DateTime minDate = new DateTime(2015, 4, 23);
-            //DateTime maxDate = new DateTime(2020, 4, 23);
-            //var orders = _context.orders.Where(o => o.ClientName == name && (o.SignDate > minDate && o.SignDate <= maxDate));
+            var orderPages = _context.orderDetails.AsNoTracking()
+                .Where(o => user.OrderNos.Contains(o.OrderNo))
+                .Skip(pageSize * (pageNum - 1))
+                .Take(pageSize)
+                .ToList();
 
             return new PageData<OrderDetail> { PageNo = pageNum, PageCount = pageCount, PageItems = orderPages };
         }
@@ -242,12 +232,10 @@ namespace Fizz.SalesOrder.Service
             DateTime now = System.DateTime.Now;
             detail.SetCommonValue(detail.CreateUserDate, detail.CreateUserNo, now, userName);
             
-            detail.No = orderNo;
+            detail.OrderNo = orderNo;
             detail.ProNo = detailNo;
-
-            //var oldDetail = _context.orderDetails.AsNoTracking().Where(o => o.No == orderNo && o.ProNo == detailNo).FirstOrDefault();
+            
             detail.UpdateChangedField<OrderDetail>(oldDetail);
-
             var u = _context.orderDetails.Update(detail);
 
 

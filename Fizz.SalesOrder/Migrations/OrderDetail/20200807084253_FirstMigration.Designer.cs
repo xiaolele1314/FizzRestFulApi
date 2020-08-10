@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Fizz.SalesOrder.Migrations
+namespace Fizz.SalesOrder.Migrations.OrderDetail
 {
-    [DbContext(typeof(OrderContext))]
-    [Migration("20200806063508_FirstMigration")]
+    [DbContext(typeof(OrderDetailContext))]
+    [Migration("20200807084253_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,10 +32,10 @@ namespace Fizz.SalesOrder.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<DateTime>("CreatSaleDate")
+                    b.Property<DateTime>("CreateUserDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("CreatSaleNo")
+                    b.Property<string>("CreateUserNo")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("SignDate")
@@ -44,18 +44,15 @@ namespace Fizz.SalesOrder.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdaeSaleDate")
+                    b.Property<DateTime>("UpdaeUserDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("UpdateSaleNo")
+                    b.Property<string>("UpdateUserNo")
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("No");
 
-                    b.HasIndex("No")
-                        .IsUnique();
-
-                    b.ToTable("orders");
+                    b.ToTable("order");
                 });
 
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
@@ -70,21 +67,18 @@ namespace Fizz.SalesOrder.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<DateTime>("CreatSaleDate")
+                    b.Property<DateTime>("CreateUserDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("CreatSaleNo")
+                    b.Property<string>("CreateUserNo")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MaterialNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("No")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(10)");
-
                     b.Property<string>("OrderNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("SortNo")
@@ -94,24 +88,29 @@ namespace Fizz.SalesOrder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateTime>("UpdaeSaleDate")
+                    b.Property<DateTime>("UpdaeUserDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("UpdateSaleNo")
+                    b.Property<string>("UpdateUserNo")
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ProNo");
 
                     b.HasIndex("OrderNo");
 
-                    b.ToTable("OrderDetail");
+                    b.HasIndex("ProNo")
+                        .IsUnique();
+
+                    b.ToTable("detail");
                 });
 
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
                 {
                     b.HasOne("Fizz.SalesOrder.Models.Order", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("OrderNo");
+                        .HasForeignKey("OrderNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

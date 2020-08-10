@@ -2,21 +2,21 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using MySql.Data.EntityFrameworkCore.Metadata;
 
-namespace Fizz.SalesOrder.Migrations
+namespace Fizz.SalesOrder.Migrations.OrderDetail
 {
     public partial class FirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "orders",
+                name: "order",
                 columns: table => new
                 {
                     No = table.Column<string>(type: "nvarchar(10)", nullable: false),
-                    CreatSaleNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    CreatSaleDate = table.Column<DateTime>(nullable: false),
-                    UpdateSaleNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    UpdaeSaleDate = table.Column<DateTime>(nullable: false),
+                    CreateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    CreateUserDate = table.Column<DateTime>(nullable: false),
+                    UpdateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    UpdaeUserDate = table.Column<DateTime>(nullable: false),
                     ClientName = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     SignDate = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
@@ -24,57 +24,56 @@ namespace Fizz.SalesOrder.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_orders", x => x.No);
+                    table.PrimaryKey("PK_order", x => x.No);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderDetail",
+                name: "detail",
                 columns: table => new
                 {
                     ProNo = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CreatSaleNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    CreatSaleDate = table.Column<DateTime>(nullable: false),
-                    UpdateSaleNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    UpdaeSaleDate = table.Column<DateTime>(nullable: false),
-                    No = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    CreateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    CreateUserDate = table.Column<DateTime>(nullable: false),
+                    UpdateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    UpdaeUserDate = table.Column<DateTime>(nullable: false),
+                    OrderNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     MaterialNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     Amount = table.Column<double>(nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     SortNo = table.Column<int>(nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true),
-                    OrderNo = table.Column<string>(nullable: true)
+                    Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderDetail", x => x.ProNo);
+                    table.PrimaryKey("PK_detail", x => x.ProNo);
                     table.ForeignKey(
-                        name: "FK_OrderDetail_orders_OrderNo",
+                        name: "FK_detail_order_OrderNo",
                         column: x => x.OrderNo,
-                        principalTable: "orders",
+                        principalTable: "order",
                         principalColumn: "No",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetail_OrderNo",
-                table: "OrderDetail",
+                name: "IX_detail_OrderNo",
+                table: "detail",
                 column: "OrderNo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_orders_No",
-                table: "orders",
-                column: "No",
+                name: "IX_detail_ProNo",
+                table: "detail",
+                column: "ProNo",
                 unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OrderDetail");
+                name: "detail");
 
             migrationBuilder.DropTable(
-                name: "orders");
+                name: "order");
         }
     }
 }

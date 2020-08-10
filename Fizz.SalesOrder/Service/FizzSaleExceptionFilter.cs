@@ -16,7 +16,7 @@ namespace Fizz.SalesOrder.Service
             {
                 context.Result = new ContentResult
                 {
-                    Content = context.Exception.Message,
+                    Content = context.Exception.InnerException.Message,
                     StatusCode = StatusCodes.Status400BadRequest,
                     ContentType = "application/json;charset=utf-8"
                 };

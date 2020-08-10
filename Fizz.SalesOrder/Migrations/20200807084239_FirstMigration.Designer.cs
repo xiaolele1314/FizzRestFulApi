@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Fizz.SalesOrder.Migrations.OrderDetail
+namespace Fizz.SalesOrder.Migrations
 {
-    [DbContext(typeof(OrderDetailContext))]
-    [Migration("20200806063532_SecondMigration")]
-    partial class SecondMigration
+    [DbContext(typeof(OrderContext))]
+    [Migration("20200807084239_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,10 +32,10 @@ namespace Fizz.SalesOrder.Migrations.OrderDetail
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<DateTime>("CreatSaleDate")
+                    b.Property<DateTime>("CreateUserDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("CreatSaleNo")
+                    b.Property<string>("CreateUserNo")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("SignDate")
@@ -44,15 +44,18 @@ namespace Fizz.SalesOrder.Migrations.OrderDetail
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdaeSaleDate")
+                    b.Property<DateTime>("UpdaeUserDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("UpdateSaleNo")
+                    b.Property<string>("UpdateUserNo")
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("No");
 
-                    b.ToTable("Order");
+                    b.HasIndex("No")
+                        .IsUnique();
+
+                    b.ToTable("order");
                 });
 
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
@@ -67,17 +70,17 @@ namespace Fizz.SalesOrder.Migrations.OrderDetail
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<DateTime>("CreatSaleDate")
+                    b.Property<DateTime>("CreateUserDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("CreatSaleNo")
+                    b.Property<string>("CreateUserNo")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MaterialNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("No")
+                    b.Property<string>("OrderNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
@@ -88,27 +91,24 @@ namespace Fizz.SalesOrder.Migrations.OrderDetail
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateTime>("UpdaeSaleDate")
+                    b.Property<DateTime>("UpdaeUserDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("UpdateSaleNo")
+                    b.Property<string>("UpdateUserNo")
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ProNo");
 
-                    b.HasIndex("No");
+                    b.HasIndex("OrderNo");
 
-                    b.HasIndex("ProNo")
-                        .IsUnique();
-
-                    b.ToTable("orderDetails");
+                    b.ToTable("detail");
                 });
 
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
                 {
                     b.HasOne("Fizz.SalesOrder.Models.Order", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("No")
+                        .HasForeignKey("OrderNo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

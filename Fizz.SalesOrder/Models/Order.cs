@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Fizz.SalesOrder.Models
 {
 
-    [Table("order")]
+   [Table("order")]
     public class Order:SalesCommonBase
     {
         [Key]

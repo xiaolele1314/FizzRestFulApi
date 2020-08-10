@@ -17,6 +17,7 @@ using Fizz.SalesOrder.Service;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Org.BouncyCastle.Asn1.Cms;
 using AutoMapper;
+using Fizz.SalesOrder.Extensions;
 
 namespace Fizz.SalesOrder
 {
@@ -25,12 +26,11 @@ namespace Fizz.SalesOrder
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            users = new List<User> { new User { Name = "fizz" }, new User { Name = "s52" } };
         }
 
         public IConfiguration Configuration { get; }
 
-        //ÄÚ´æÖĞ´´½¨ÓÃ»§
+        //å†…å­˜ä¸­åˆ›å»ºç”¨æˆ·
         public static List<User> users { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -55,10 +55,9 @@ namespace Fizz.SalesOrder
 
             services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-
+            //åˆå§‹åŒ–ç”¨æˆ·
+            users = CommonService.InitializeUsers(services);
             //ServiceProviderEngine
-
-           
 
             
             
