@@ -13,6 +13,7 @@ namespace Fizz.SalesOrder.Models
         //public List<OrderStatusEnum> OrderStatus { get; set; }
         public OrderStatusEnum? State1 { get; set; }
         public OrderStatusEnum? State2 { get; set; }
+        public OrderStatusEnum[] State { get; set; }
 
         public DateRange SignDateRange { get; set; }
         public DateRange CreateOrderDateRange { get; set; }

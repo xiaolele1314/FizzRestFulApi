@@ -13,7 +13,7 @@ namespace Fizz.SalesOrder.Controllers
 {
 
     [Produces("application/json")]
-    [Route("Fizz/Sales/Order/")]
+    [Route("Fizz/SalesOrder/")]
     public class OrderController : ControllerBase
     {
 
@@ -31,7 +31,7 @@ namespace Fizz.SalesOrder.Controllers
         // 创建用户，添加销售订单
         // POST api/order
         [HttpPost()]
-        public ResultMes Post([FromHeader] string userName, [FromBody] Order order)
+        public ResultMessage<Order> Post([FromHeader] string userName, [FromBody] Order order)
         {
 
 
@@ -40,19 +40,19 @@ namespace Fizz.SalesOrder.Controllers
 
         //查询用户所有销售订单
         // GET api/order
-        [HttpGet("get")]
-        public object Get([FromHeader] string userName, [FromQuery] string propertyName, [FromBody]MultipleGetStyleOption getStyleOption, [FromQuery] int pageSize, [FromQuery] int pageNum)
+        [HttpGet("")]
+        public object Get([FromHeader] string userName, [FromQuery] string sortName, [FromQuery]MultipleGetStyleOption getStyleOption, [FromQuery] int pageSize, [FromQuery] int pageNum)
         {
-            return _orderService.QueryOrderAll(userName, propertyName, getStyleOption, pageSize, pageNum);
+            return _orderService.QueryOrderAll(userName, sortName, getStyleOption, pageSize, pageNum);
         }
 
         [HttpGet("{orderNo:int:length(1,10)}")]
-        public object Get([FromHeader] string userName, string orderNo)
+        public object Get(string orderNo)
         {
-            return _orderService.QueryOrderByKey(userName, orderNo);
+            return _orderService.QueryOrderByKey(orderNo);
         }
 
-        [HttpGet("{getByUser}")]
+        [HttpGet("user")]
         public object GetByUser([FromHeader] string userName, [FromQuery] int pageSize, [FromQuery] int pageNum)
         {
             return _orderService.QureyOrderByUser(userName, pageSize, pageNum);
@@ -61,7 +61,7 @@ namespace Fizz.SalesOrder.Controllers
         //删除用户所有订单和订单明细
         // DELETE api/order
         [HttpDelete("{orderNo:int:length(1,10)}")]
-        public ResultMes DeleteUser([FromHeader] string userName, string orderNo)
+        public ResultMessage<Order> DeleteUser([FromHeader] string userName, string orderNo)
         {         
            return _orderService.DeleteOrderByKey(userName, orderNo);
         }
@@ -70,7 +70,7 @@ namespace Fizz.SalesOrder.Controllers
         //更新用户的销售单
         // PUT api/order
         [HttpPut("{orderNo:int:length(1,10)}")]
-        public ResultMes Put([FromHeader] string userName,string orderNo, [FromBody] Order order)
+        public ResultMessage<Order> Put([FromHeader] string userName,string orderNo, [FromBody] Order order)
         { 
             return _orderService.UpdateOrder(userName, orderNo, order);
         }

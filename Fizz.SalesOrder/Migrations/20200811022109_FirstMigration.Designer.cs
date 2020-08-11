@@ -3,14 +3,16 @@ using System;
 using Fizz.SalesOrder.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Fizz.SalesOrder.Migrations.OrderDetail
+namespace Fizz.SalesOrder.Migrations
 {
-    [DbContext(typeof(OrderDetailContext))]
-    partial class OrderDetailContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(OrderContext))]
+    [Migration("20200811022109_FirstMigration")]
+    partial class FirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +44,7 @@ namespace Fizz.SalesOrder.Migrations.OrderDetail
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdaeUserDate")
+                    b.Property<DateTime>("UpdateUserDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UpdateUserNo")
@@ -50,14 +52,20 @@ namespace Fizz.SalesOrder.Migrations.OrderDetail
 
                     b.HasKey("No");
 
+                    b.HasIndex("No")
+                        .IsUnique();
+
                     b.ToTable("order");
                 });
 
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
                 {
-                    b.Property<int>("ProNo")
+                    b.Property<int>("RowNo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("OrderNo")
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("double");
@@ -75,10 +83,6 @@ namespace Fizz.SalesOrder.Migrations.OrderDetail
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("OrderNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(10)");
-
                     b.Property<int>("SortNo")
                         .HasColumnType("int");
 
@@ -86,18 +90,15 @@ namespace Fizz.SalesOrder.Migrations.OrderDetail
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateTime>("UpdaeUserDate")
+                    b.Property<DateTime>("UpdateUserDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UpdateUserNo")
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("ProNo");
+                    b.HasKey("RowNo", "OrderNo");
 
                     b.HasIndex("OrderNo");
-
-                    b.HasIndex("ProNo")
-                        .IsUnique();
 
                     b.ToTable("detail");
                 });

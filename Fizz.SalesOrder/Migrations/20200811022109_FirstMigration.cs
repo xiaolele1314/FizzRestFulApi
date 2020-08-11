@@ -16,7 +16,7 @@ namespace Fizz.SalesOrder.Migrations
                     CreateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     CreateUserDate = table.Column<DateTime>(nullable: false),
                     UpdateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    UpdaeUserDate = table.Column<DateTime>(nullable: false),
+                    UpdateUserDate = table.Column<DateTime>(nullable: false),
                     ClientName = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     SignDate = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
@@ -31,13 +31,13 @@ namespace Fizz.SalesOrder.Migrations
                 name: "detail",
                 columns: table => new
                 {
-                    ProNo = table.Column<int>(nullable: false)
+                    OrderNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    RowNo = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     CreateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     CreateUserDate = table.Column<DateTime>(nullable: false),
                     UpdateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    UpdaeUserDate = table.Column<DateTime>(nullable: false),
-                    OrderNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    UpdateUserDate = table.Column<DateTime>(nullable: false),
                     MaterialNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     Amount = table.Column<double>(nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(10)", nullable: false),
@@ -46,7 +46,7 @@ namespace Fizz.SalesOrder.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_detail", x => x.ProNo);
+                    table.PrimaryKey("PK_detail", x => new { x.RowNo, x.OrderNo });
                     table.ForeignKey(
                         name: "FK_detail_order_OrderNo",
                         column: x => x.OrderNo,

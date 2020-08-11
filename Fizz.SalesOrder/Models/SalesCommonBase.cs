@@ -21,6 +21,6 @@ namespace Fizz.SalesOrder.Models
         public string UpdateUserNo { get; set; }
 
         [DefaultValue(typeof(DateTime), "0001-01-01")]
-        public DateTime UpdaeUserDate { get; set; }
+        public DateTime UpdateUserDate { get; set; }
     }
 }

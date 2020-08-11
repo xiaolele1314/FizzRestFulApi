@@ -20,7 +20,7 @@
 
 ## 4. 资源CURD
 
-### 5.1 获取资源
+### 4.1 获取资源
 
 **简要描述： **
 
@@ -28,13 +28,35 @@
 
 **URL示例：**
 
-- 获取销售订单：`http://{host}/Fizz/Sales/Order?orderNo={orderNo}&pageSize={pageSize}&pageNum={pageNum}&findType={findType}`
-
-  findType: GetAll = 1, GetByKey = 2, GetByUser = 3
+- 获取全部销售订单：`http://{host}/Fizz/Sales/Order?orderNo={orderNo}&pageSize={pageSize}&pageNum={pageNum}&sortName={sortName}`
 
   http method: get
 
   header: userName
+
+  request body: getStyleOption(参数类)
+
+  {
+
+    "state1":0,
+
+    "state2":1
+
+  }
+
+- 获取某个销售订单：`http://{host}/Fizz/Sales/Order/{orderNo}`
+
+  http method: get
+
+- 获取某个用户全部销售订单：`http://{host}/Fizz/Sales/Order/user`
+
+  http method: get
+
+  header: userName
+
+### 4.2增加资源
+
+**URL示例：**
 
 - 新增订单：`http://{host}/Fizz/Sales/Order`
 
@@ -56,7 +78,10 @@
 
   response:
 
-  
+
+### 4.3更新资源
+
+**URL示例：**
 
 - 更新订单：`http://{host}/Fizz/Sales/Order/{orderNo}`
 
@@ -74,29 +99,40 @@
 
   }
 
-  
 
-- 删除订单：`http://{host}/Fizz/Sales/Order?orderno={orderNo}?deleType={deleteType}`
+### 4.4删除订单
 
-  deleteType: DeleteAll = 1, DeleteByKey = 2, DeleteByUser = 3
+**URL示例：**
+
+- 删除订单：`http://{host}/Fizz/Sales/Order/{orderNo}`
 
   http method: delete
 
   header: userName
 
-  
+### 4.5获取订单明细
 
-- 获取订单明细：`http://{host}/Fizz/Sales/OrderDetail?orderNo={orderNo}&detailNo={detailNo}&pageSize={pageSize}&pageNum={pageNum}&findType={findType}`
+- 获取一个销售订单的所有明细：
 
-  findType:  GetAll = 1, GetByKey = 2, GetByUser = 3, GetByOrder = 4
+  `http://{host}/Fizz/Sales/Order/{orderNo}/OrderDetail?pageSize={pageSize}&pageNum={pageNum}`
+
+  http method: get
+
+- 获取一个订单明细：`http://{host}/Fizz/Sales/Order/{orderNo}/OrderDetail/{detailNo}`
+
+  http method: get
+
+- 获取一个用户的所有明细：`http://{host}/Fizz/Sales/Order/{orderNo}/OrderDetail/user?pageSize={pageSize}&pageNum={pageNum}`
 
   http method: get
 
   header: userName
 
-  
+### 4.6创建订单明细
 
-- 订单明细的新增：`http://{host}/Fizz/Sales/OrderDetail/{orderNo}`
+- 订单明细的新增：
+
+  `http://{host}/Fizz/Sales/Order/{orderNo}/OrderDetail`
 
   http method:post
 
@@ -114,17 +150,33 @@
 
   }
 
-- 订单明细的删除：`http://{host}/Fizz/Sales/OrderDetail?orderNo={orderNo}&detailNo={detailNO}&deleteType={deleteType}`
+### 4.7删除订单明细
 
-  deleteType: DeleteAll = 1, DeleteByKey = 2, DeleteByUser = 3, DeleteByOrder = 4
+- 删除一个订单明细：
+
+  `http://{host}/Fizz/Sales/Order/{orderNo}/OrderDetail/{detailNo}`
 
   http method: delete
 
+- 删除一个订单下的所有明细：
+
+  `http://{host}/Fizz/Sales/Order/{orderNo}/OrderDetail`
+
+  http method: delete
+
+- 删除一个用户下的所有明细
+
+  `http://{host}/Fizz/Sales/Order/{orderNo}/OrderDetail/user`
+
+  http method: userName
+
   header: userName
 
-  
+### 更新订单明细
 
-- 订单明细的修改：`http://{host}/Fizz/Sales/OrderDetail/{orderNo}/{detailNo}`
+- 订单明细的修改：
+
+  `http://{host}/Fizz/Sales/Order/{orderNo}/OrderDetail/{detailNo}`
 
   http method: put
 
@@ -141,7 +193,7 @@
    "unit":"10"
 
   }
-
+  
   
 
  

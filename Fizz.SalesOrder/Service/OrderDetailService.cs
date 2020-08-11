@@ -20,7 +20,7 @@ namespace Fizz.SalesOrder.Service
         }
 
 
-        public ResultMes CreatOrderDetails(string userName, OrderDetail detail, string orderNo)
+        public ResultMessage<OrderDetail> CreatOrderDetails(string userName, OrderDetail detail, string orderNo)
         {
             //获取用户
             User user = CommonService.CreateUser(userName, null);
@@ -30,7 +30,7 @@ namespace Fizz.SalesOrder.Service
 
             if (f == null)
             {
-                return new ResultMes { Code = 203, Message = "该用户没有此销售订单" };
+                return new ResultMessage<OrderDetail> { Code = 203, Message = "该用户没有此销售订单", ResultObject = null };
             }
 
             //添加销售订单明细
@@ -43,42 +43,24 @@ namespace Fizz.SalesOrder.Service
 
             _context.SaveChanges();
 
-            return new ResultMes { Code = 200, Message = "OK" };
+            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = detail };
         }
 
-        public ResultMes DeleteDetailAll()
-        { 
-            var details = _context.orderDetails.ToList();
-            foreach (OrderDetail item in details)
-            {
-                _context.orderDetails.Remove(item);
-            }
 
-            _context.SaveChanges();
 
-            return new ResultMes { Code = 200, Message = "OK" };
-        }
-
-        public ResultMes DeleteDetailByKey(string userName, int detailNo)
+        public ResultMessage<OrderDetail> DeleteDetailByKey(int detailNo)
         {
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
-
-
             var detail = _context.orderDetails.Find(detailNo);
 
             _context.orderDetails.Remove(detail);
 
             _context.SaveChanges();
 
-            return new ResultMes { Code = 200, Message = "OK" };
+            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = null };
         }
 
-        public ResultMes DeleteDetailByOrder(string userName, string orderNo)
+        public ResultMessage<OrderDetail> DeleteDetailByOrder(string orderNo)
         {
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
-
             var details = _context.orderDetails.Where(o => o.OrderNo == orderNo);
             foreach (OrderDetail item in details)
             {
@@ -87,10 +69,10 @@ namespace Fizz.SalesOrder.Service
 
             _context.SaveChanges();
 
-            return new ResultMes { Code = 200, Message = "OK" };
+            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = null };
         }
 
-        public ResultMes DeleteDetailByUser(string userName)
+        public ResultMessage<OrderDetail> DeleteDetailByUser(string userName)
         {
             //获取用户
             User user = CommonService.CreateUser(userName, null);
@@ -103,54 +85,22 @@ namespace Fizz.SalesOrder.Service
 
             _context.SaveChanges();
 
-            return new ResultMes { Code = 200, Message = "OK" };
+            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = null };
         }
 
-        public PageData<OrderDetail> QueryDetailAll(int pageSize, int pageNum)
+
+        public PageData<OrderDetail> QueryDetailByKey(int detailNo )
         {
-
-
-            if (pageNum < 0)
-            {
-                throw new Exception("pageNum error!");
-            }
-            int count = _context.orderDetails.Count();
-            decimal pageCount = Math.Ceiling((decimal)count / pageSize);
-
-            if (pageNum > pageCount)
-            {
-                throw new Exception("pageNum too large!");
-            }
-            //分页查询
-
             var orderPages = _context.orderDetails
                 .AsNoTracking()
-                .Skip(pageSize * (pageNum - 1))
-                .Take(pageSize)
-                .ToList();
-
-            return new PageData<OrderDetail> { PageNo = pageNum, PageCount = pageCount, PageItems = orderPages };
-        }
-
-        public PageData<OrderDetail> QueryDetailByKey(string userName, int detailNo )
-        {
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
-
-            var orderPages = _context.orderDetails
-                .AsNoTracking()
-                .Where(o => o.ProNo == detailNo)
+                .Where(o => o.RowNo == detailNo)
                 .ToList();
 
             return new PageData<OrderDetail> { PageNo = 1, PageCount = 1, PageItems = orderPages };
         }
 
-        public PageData<OrderDetail> QueryDetailByOrder(string userName, string orderNo, int pageSize, int pageNum)
+        public PageData<OrderDetail> QueryDetailByOrder(string orderNo, int pageSize, int pageNum)
         {
-
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
-
             if (pageNum < 0)
             {
                 throw new Exception("pageNum error!");
@@ -204,28 +154,28 @@ namespace Fizz.SalesOrder.Service
         }
 
      
-        public ResultMes UpdateOrderDetail(string userName, string orderNo, int detailNo, OrderDetail detail)
+        public ResultMessage<OrderDetail> UpdateOrderDetail(string userName, string orderNo, int detailNo, OrderDetail detail)
         {
             //获取用户
             User user = CommonService.CreateUser(userName, null);
 
 
-            if (detail.ProNo != 0)
+            if (detail.RowNo != 0)
             {
-                return new ResultMes { Code = 203, Message = "不能修改项目号" };
+                return new ResultMessage<OrderDetail> { Code = 203, Message = "不能修改项目号", ResultObject = null };
             }
 
             //判断订单是否存在
             if (user.OrderNos.Find(o => o == orderNo) == null)
             {
-                return new ResultMes { Code = 204, Message = "订单不存在" };
+                return new ResultMessage<OrderDetail> { Code = 204, Message = "订单不存在", ResultObject = null };
             }
 
             //判断明细是否存在
-            var oldDetail = _context.orderDetails.Where(o => o.ProNo == detailNo).AsNoTracking().FirstOrDefault();
+            var oldDetail = _context.orderDetails.Where(o => o.RowNo == detailNo).AsNoTracking().FirstOrDefault();
             if (oldDetail == null)
             {
-                return new ResultMes { Code = 205, Message = "订单明细不存在" };
+                return new ResultMessage<OrderDetail> { Code = 205, Message = "订单明细不存在", ResultObject = null };
             }
 
             //修改明细数据
@@ -233,7 +183,7 @@ namespace Fizz.SalesOrder.Service
             detail.SetCommonValue(detail.CreateUserDate, detail.CreateUserNo, now, userName);
             
             detail.OrderNo = orderNo;
-            detail.ProNo = detailNo;
+            detail.RowNo = detailNo;
             
             detail.UpdateChangedField<OrderDetail>(oldDetail);
             var u = _context.orderDetails.Update(detail);
@@ -241,7 +191,7 @@ namespace Fizz.SalesOrder.Service
 
             _context.SaveChanges();
 
-            return new ResultMes { Code = 200, Message = "OK" };
+            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = detail };
         }
 
        

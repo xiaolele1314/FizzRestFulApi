@@ -19,13 +19,17 @@ namespace Fizz.SalesOrder.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
+
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(d => d.Order)
                 .WithMany(o => o.OrderDetails)
                 .HasForeignKey(d => d.OrderNo);
 
+            
+
             modelBuilder.Entity<OrderDetail>()
-                .HasIndex(o => o.ProNo)
+                .HasIndex(o => new { o.RowNo,o.OrderNo })
                 .IsUnique();
 
 

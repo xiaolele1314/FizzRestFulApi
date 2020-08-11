@@ -56,7 +56,8 @@ namespace Fizz.SalesOrder
             services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             //初始化用户
-            users = CommonService.InitializeUsers(services);
+            //users = CommonService.InitializeUsers(services);
+
             //ServiceProviderEngine
 
             

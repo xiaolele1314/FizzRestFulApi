@@ -17,7 +17,7 @@ namespace Fizz.SalesOrder.Extensions
         {
             salesOption.CreateUserDate = createSaleDate;
             salesOption.CreateUserNo = createSaleNo;
-            salesOption.UpdaeUserDate = updateSaleDate;
+            salesOption.UpdateUserDate = updateSaleDate;
             salesOption.UpdateUserNo = updateSaleNo;
             
         }
@@ -60,7 +60,7 @@ namespace Fizz.SalesOrder.Extensions
         }
 
         //多种查询并分页
-        public static List<Order> MultipleGet(this OrderContext orderContext, string propertyName, MultipleGetStyleOption getStyleOption, int pageSize, int pageNum)
+        public static List<Order> MultipleGet(this OrderContext orderContext, string sortName, MultipleGetStyleOption getStyleOption, int pageSize, int pageNum)
         {
             var ordersQuery = orderContext.orders.AsNoTracking();
             if(getStyleOption != null)
@@ -128,7 +128,7 @@ namespace Fizz.SalesOrder.Extensions
 
                 if (getStyleOption.UpdateOrderDateRange.JudgeDateRange())
                 {
-                    ordersQuery = ordersQuery.Where(o => o.UpdaeUserDate >= getStyleOption.UpdateOrderDateRange.DateMin && o.UpdaeUserDate <= getStyleOption.UpdateOrderDateRange.DateMax);
+                    ordersQuery = ordersQuery.Where(o => o.UpdateUserDate >= getStyleOption.UpdateOrderDateRange.DateMin && o.UpdateUserDate <= getStyleOption.UpdateOrderDateRange.DateMax);
                 }
 
                 //根据物料编号查询       
@@ -136,7 +136,7 @@ namespace Fizz.SalesOrder.Extensions
 
             
             //排序，默认按照创建日期倒序排序
-            if(propertyName == null)
+            if(sortName == null)
             {
                 ordersQuery = ordersQuery.OrderByDescending(o => o.CreateUserDate);
             }
@@ -144,7 +144,7 @@ namespace Fizz.SalesOrder.Extensions
             {
                 Type t = typeof(Order);
                 PropertyInfo[] pi = t.GetProperties();
-                PropertyInfo info = pi.Where(o => o.Name.ToLower() == propertyName.ToLower()).FirstOrDefault();
+                PropertyInfo info = pi.Where(o => o.Name.ToLower() == sortName.ToLower()).FirstOrDefault();
 
                 //ordersQuery = ordersQuery.OrderBy(o => info.GetValue(o)).AsQueryable();
 

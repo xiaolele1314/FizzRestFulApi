@@ -42,7 +42,7 @@ namespace Fizz.SalesOrder.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdaeUserDate")
+                    b.Property<DateTime>("UpdateUserDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UpdateUserNo")
@@ -58,9 +58,12 @@ namespace Fizz.SalesOrder.Migrations
 
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
                 {
-                    b.Property<int>("ProNo")
+                    b.Property<int>("RowNo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("OrderNo")
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("double");
@@ -78,10 +81,6 @@ namespace Fizz.SalesOrder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("OrderNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(10)");
-
                     b.Property<int>("SortNo")
                         .HasColumnType("int");
 
@@ -89,13 +88,13 @@ namespace Fizz.SalesOrder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateTime>("UpdaeUserDate")
+                    b.Property<DateTime>("UpdateUserDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UpdateUserNo")
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("ProNo");
+                    b.HasKey("RowNo", "OrderNo");
 
                     b.HasIndex("OrderNo");
 

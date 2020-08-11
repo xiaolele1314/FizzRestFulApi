@@ -9,18 +9,16 @@ namespace Fizz.SalesOrder.Service
     public interface IOrderDetailService
     {
         //ResultMes CreatOrder(string name, Order order);
-        ResultMes CreatOrderDetails(string userName, OrderDetail orderDetail, string orderNo);
+        ResultMessage<OrderDetail> CreatOrderDetails(string userName, OrderDetail orderDetail, string orderNo);
         
         PageData<OrderDetail> QueryDetailByUser(string userName, int pageSize, int pageNum);
-        PageData<OrderDetail> QueryDetailAll(int pageSize, int pageNum);
-        PageData<OrderDetail> QueryDetailByKey(string userName, int detailNo);
-        PageData<OrderDetail> QueryDetailByOrder(string userName, string orderNo, int pageSize, int pageNum);
+        PageData<OrderDetail> QueryDetailByKey(int detailNo);
+        PageData<OrderDetail> QueryDetailByOrder(string orderNo, int pageSize, int pageNum);
 
-        ResultMes DeleteDetailAll();
-        ResultMes DeleteDetailByKey(string userName, int detailNo);
-        ResultMes DeleteDetailByUser(string userName);
-        ResultMes DeleteDetailByOrder(string userName, string orderNo);
+        ResultMessage<OrderDetail> DeleteDetailByKey(int detailNo);
+        ResultMessage<OrderDetail> DeleteDetailByUser(string userName);
+        ResultMessage<OrderDetail> DeleteDetailByOrder(string orderNo);
         //ResultMes UpdateOrder(string name, string orderNo, Order order);
-        ResultMes UpdateOrderDetail(string userName, string orderNo, int detailNo, OrderDetail detail);
+        ResultMessage<OrderDetail> UpdateOrderDetail(string userName, string orderNo, int detailNo, OrderDetail detail);
     }
 }

@@ -20,8 +20,8 @@ namespace Fizz.SalesOrder.Models
         }
 
         public DbSet<Order> orders { get; set; }
-        
-        
+       
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,8 @@ namespace Fizz.SalesOrder.Models
                 .HasIndex(o => o.No)
                 .IsUnique();
 
+            modelBuilder.Entity<OrderDetail>()
+                .HasKey(o => new { o.RowNo, o.OrderNo });
 
             base.OnModelCreating(modelBuilder);
         }

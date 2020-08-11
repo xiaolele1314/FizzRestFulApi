@@ -19,5 +19,6 @@ namespace Fizz.SalesOrder.Models
         public  List<string> OrderNos { get; set; }
         public string Name { get; set; }
         
+
     }
 }

@@ -11,16 +11,16 @@ namespace Fizz.SalesOrder.Models
     public class OrderDetail:SalesCommonBase
     {
         [DefaultValue("")]
-        [Column(TypeName = ColumnTypes.NVarchar10)]
         [Required]
         [ForeignKey("No")]
+        [Key, Column(Order = 1, TypeName = ColumnTypes.NVarchar10)]
         public string OrderNo { get; set; }
 
-        [Key]
+        [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DefaultValue(0)]
         [Required]
-        public int ProNo { get; set; }
+        public int RowNo { get; set; }
        
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar10)]
