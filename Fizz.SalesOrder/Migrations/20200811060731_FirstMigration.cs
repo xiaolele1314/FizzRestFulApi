@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.Data.EntityFrameworkCore.Metadata;
 
 namespace Fizz.SalesOrder.Migrations
 {
@@ -19,7 +18,7 @@ namespace Fizz.SalesOrder.Migrations
                     UpdateUserDate = table.Column<DateTime>(nullable: false),
                     ClientName = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     SignDate = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: true),
                     Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true)
                 },
                 constraints: table =>
@@ -32,8 +31,7 @@ namespace Fizz.SalesOrder.Migrations
                 columns: table => new
                 {
                     OrderNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
-                    RowNo = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    RowNo = table.Column<int>(nullable: false),
                     CreateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     CreateUserDate = table.Column<DateTime>(nullable: false),
                     UpdateUserNo = table.Column<string>(type: "nvarchar(100)", nullable: true),
@@ -41,7 +39,7 @@ namespace Fizz.SalesOrder.Migrations
                     MaterialNo = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     Amount = table.Column<double>(nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(10)", nullable: false),
-                    SortNo = table.Column<int>(nullable: false),
+                    SortNo = table.Column<int>(nullable: true),
                     Comment = table.Column<string>(type: "nvarchar(2000)", nullable: true)
                 },
                 constraints: table =>
@@ -59,6 +57,12 @@ namespace Fizz.SalesOrder.Migrations
                 name: "IX_detail_OrderNo",
                 table: "detail",
                 column: "OrderNo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_detail_RowNo_OrderNo",
+                table: "detail",
+                columns: new[] { "RowNo", "OrderNo" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_No",

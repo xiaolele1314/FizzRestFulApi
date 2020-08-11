@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fizz.SalesOrder.Migrations
 {
-    [DbContext(typeof(OrderContext))]
-    partial class OrderContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SalesContext))]
+    partial class SalesContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -39,7 +39,7 @@ namespace Fizz.SalesOrder.Migrations
                     b.Property<DateTime>("SignDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdateUserDate")
@@ -59,13 +59,13 @@ namespace Fizz.SalesOrder.Migrations
             modelBuilder.Entity("Fizz.SalesOrder.Models.OrderDetail", b =>
                 {
                     b.Property<int>("RowNo")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("OrderNo")
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<double>("Amount")
+                    b.Property<double?>("Amount")
+                        .IsRequired()
                         .HasColumnType("double");
 
                     b.Property<string>("Comment")
@@ -81,7 +81,7 @@ namespace Fizz.SalesOrder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<int>("SortNo")
+                    b.Property<int?>("SortNo")
                         .HasColumnType("int");
 
                     b.Property<string>("Unit")
@@ -97,6 +97,9 @@ namespace Fizz.SalesOrder.Migrations
                     b.HasKey("RowNo", "OrderNo");
 
                     b.HasIndex("OrderNo");
+
+                    b.HasIndex("RowNo", "OrderNo")
+                        .IsUnique();
 
                     b.ToTable("detail");
                 });

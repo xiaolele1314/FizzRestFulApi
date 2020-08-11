@@ -18,11 +18,11 @@ namespace Fizz.SalesOrder.Controllers
     {
 
 
-        private readonly OrderContext _context;
+        private readonly SalesContext _context;
 
         private readonly IOrderService _orderService;
 
-        public OrderController(OrderContext context, IOrderService service)
+        public OrderController(SalesContext context, IOrderService service)
         {
             this._context = context;
             this._orderService = service;
@@ -33,29 +33,21 @@ namespace Fizz.SalesOrder.Controllers
         [HttpPost()]
         public ResultMessage<Order> Post([FromHeader] string userName, [FromBody] Order order)
         {
-
-
             return _orderService.CreatOrder(userName, order);
         }
 
         //查询用户所有销售订单
         // GET api/order
         [HttpGet("")]
-        public object Get([FromHeader] string userName, [FromQuery] string sortName, [FromQuery]MultipleGetStyleOption getStyleOption, [FromQuery] int pageSize, [FromQuery] int pageNum)
+        public object Get([FromHeader] string userName, [FromQuery]MultipleGetStyleOption getStyleOption)
         {
-            return _orderService.QueryOrderAll(userName, sortName, getStyleOption, pageSize, pageNum);
+            return _orderService.QueryOrderAll(userName, getStyleOption);
         }
 
         [HttpGet("{orderNo:int:length(1,10)}")]
         public object Get(string orderNo)
         {
             return _orderService.QueryOrderByKey(orderNo);
-        }
-
-        [HttpGet("user")]
-        public object GetByUser([FromHeader] string userName, [FromQuery] int pageSize, [FromQuery] int pageNum)
-        {
-            return _orderService.QureyOrderByUser(userName, pageSize, pageNum);
         }
 
         //删除用户所有订单和订单明细

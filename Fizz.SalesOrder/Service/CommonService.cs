@@ -59,7 +59,7 @@ namespace Fizz.SalesOrder.Service
         public static List<User> InitializeUsers(IServiceCollection services)
         {
             IServiceProvider provider = services.BuildServiceProvider();
-            OrderContext orderContext = provider.GetService<OrderContext>();
+            SalesContext orderContext = provider.GetService<SalesContext>();
 
 
             List<User> users = new List<User> { new User { Name = "fizz" }, new User { Name = "s52" } };

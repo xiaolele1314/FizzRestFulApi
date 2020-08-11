@@ -10,15 +10,15 @@ namespace Fizz.SalesOrder.Controllers
 {
 
     [Produces("application/json")]
-    [Route("Fizz/Sales/Order/{orderNo:int:length(1,10)}/OrderDetl/")]
+    [Route("Fizz/SalesOrder/{orderNo:int:length(1,10)}/OrderDetail/")]
     public class OrderDetailController:ControllerBase
     {
-        private readonly OrderDetailContext _context;
+        private readonly SalesContext _context;
 
         private readonly IOrderDetailService _detailService;
 
 
-        public OrderDetailController(OrderDetailContext context, IOrderDetailService service)
+        public OrderDetailController(SalesContext context, IOrderDetailService service)
         {
             this._context = context;
             this._detailService = service;
@@ -37,40 +37,31 @@ namespace Fizz.SalesOrder.Controllers
         //查询用户所有销售订单
         // GET api/order
 
-        [HttpGet("{detailNo}")]
-        public object Get(int detailNo)
+        [HttpGet("{detailNo:int}")]
+        public object Get(string orderNo, int detailNo)
         {
-              return _detailService.QueryDetailByKey(detailNo);
-        }
-
-        [HttpGet("user")]
-        public object GetByUser([FromHeader] string userName, [FromQuery] int pageSize, [FromQuery] int pageNum)
-        {
-              return _detailService.QueryDetailByUser(userName, pageSize, pageNum);      
+            return _detailService.QueryDetailByKey(orderNo,detailNo);
         }
 
         [HttpGet("")]
-        public object Get(string orderNo, [FromQuery] int pageSize, [FromQuery] int pageNum)
+        public object Get(string orderNo, [FromQuery] int? pageSize, [FromQuery] int? pageNum)
         {
-              return _detailService.QueryDetailByOrder(orderNo, pageSize, pageNum);
-        }
+            pageNum = pageNum ?? 1;
+            pageSize = pageSize ?? 100;
+            return _detailService.QueryDetailByOrder(orderNo, pageSize, pageNum);
+        } 
 
         //删除用户所有订单和订单明细
         // DELETE api/order
 
         [HttpDelete("{detailNo:int:length(1,10)}")]
-        public ResultMessage<OrderDetail> DeleteUser(int detailNo)
-        {
-             return _detailService.DeleteDetailByKey(detailNo);
-        }
-
-        [HttpDelete("user")]
-        public ResultMessage<OrderDetail> DeleteUser([FromHeader] string userName)
+        public ResultMessage<OrderDetail> DeleteUser(string orderNo, int detailNo)
         {
 
-             return _detailService.DeleteDetailByUser(userName);
-
+            return _detailService.DeleteDetailByKey(orderNo, detailNo);
         }
+
+        
 
         [HttpDelete("")]
         public ResultMessage<OrderDetail> DeleteByOrderNo(string orderNo)
@@ -84,7 +75,7 @@ namespace Fizz.SalesOrder.Controllers
         [HttpPut("{detailNo:int:length(1,10)}")]
         public ResultMessage<OrderDetail> Put([FromHeader] string userName, string orderNo, int detailNo, [FromBody] OrderDetail detail)
         {
-            return _detailService.UpdateOrderDetail(userName, orderNo, detailNo, detail);
+           return _detailService.UpdateOrderDetail(userName, orderNo, detailNo, detail);
         }
 
     }

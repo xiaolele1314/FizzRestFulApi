@@ -17,7 +17,7 @@ namespace Fizz.SalesOrder.Models
         public string OrderNo { get; set; }
 
         [Key, Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [DefaultValue(0)]
         [Required]
         public int RowNo { get; set; }
@@ -29,7 +29,7 @@ namespace Fizz.SalesOrder.Models
        
         [DefaultValue(0)]
         [Required]
-        public double Amount { get; set; }
+        public double? Amount { get; set; }
        
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar10)]
@@ -37,7 +37,7 @@ namespace Fizz.SalesOrder.Models
         public string Unit { get; set; }
        
         [DefaultValue(0)]
-        public int SortNo { get; set; }
+        public int? SortNo { get; set; }
 
         public static explicit operator OrderDetail(Order v)
         {

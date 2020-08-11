@@ -28,7 +28,7 @@ namespace Fizz.SalesOrder.Models
         public DateTime SignDate { get; set; }
         
         [DefaultValue((int)OrderStatusEnum.Pending)]
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar2000)]

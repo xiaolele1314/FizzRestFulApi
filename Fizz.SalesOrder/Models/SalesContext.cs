@@ -8,19 +8,19 @@ using Microsoft.Extensions.Logging.Debug;
 
 namespace Fizz.SalesOrder.Models
 {
-    public class OrderContext:DbContext
+    public class SalesContext:DbContext
     {
         public static readonly LoggerFactory LoggerFactory =
                new LoggerFactory(new[] { new DebugLoggerProvider() });
 
-        public OrderContext(DbContextOptions<OrderContext> options)
+        public SalesContext(DbContextOptions<SalesContext> options)
             : base(options)
         {
 
         }
 
         public DbSet<Order> orders { get; set; }
-       
+        public DbSet<OrderDetail> details { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +31,15 @@ namespace Fizz.SalesOrder.Models
 
             modelBuilder.Entity<OrderDetail>()
                 .HasKey(o => new { o.RowNo, o.OrderNo });
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(d => d.Order)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(d => d.OrderNo);
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasIndex(o => new { o.RowNo, o.OrderNo })
+                .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }

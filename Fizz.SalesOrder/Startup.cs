@@ -18,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Org.BouncyCastle.Asn1.Cms;
 using AutoMapper;
 using Fizz.SalesOrder.Extensions;
+using Fizz.SalesOrder.Interface;
 
 namespace Fizz.SalesOrder
 {
@@ -39,8 +40,8 @@ namespace Fizz.SalesOrder
             //services.AddDbContext<TodoContext>(opt =>
             //  opt.UseInMemoryDatabase("TodoList"));
 
-            services.AddDbContext<OrderContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
-            services.AddDbContext<OrderDetailContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
+            services.AddDbContext<SalesContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
+            //services.AddDbContext<OrderDetailContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
 
             services.AddMvc(options => { 
                     options.EnableEndpointRouting = false;
@@ -50,22 +51,21 @@ namespace Fizz.SalesOrder
 
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<IOrderUserService, OrderUserService>();
 
             //services.AddAutoMapper();
 
             services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             //初始化用户
-            //users = CommonService.InitializeUsers(services);
-
-            //ServiceProviderEngine
+            users = CommonService.InitializeUsers(services);
 
             
             
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, OrderContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SalesContext context)
         {
             if (env.IsDevelopment())
             {

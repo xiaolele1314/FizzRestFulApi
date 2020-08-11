@@ -60,8 +60,10 @@ namespace Fizz.SalesOrder.Extensions
         }
 
         //多种查询并分页
-        public static List<Order> MultipleGet(this OrderContext orderContext, string sortName, MultipleGetStyleOption getStyleOption, int pageSize, int pageNum)
+        public static object MultipleGet(this SalesContext orderContext, MultipleGetStyleOption getStyleOption)
         {
+            int pageSize = 100;
+            int pageNum = 1;
             var ordersQuery = orderContext.orders.AsNoTracking();
             if(getStyleOption != null)
             {
@@ -81,20 +83,16 @@ namespace Fizz.SalesOrder.Extensions
                     ordersQuery = ordersQuery.Where(o => o.Comment.Contains(getStyleOption.Comment));
                 }
 
-                //状态查询
-                List<Expression<Func<Order, bool>>> expressions = new List<Expression<Func<Order, bool>>>();               
-                if (getStyleOption.State1 != null)
+                //状态查询   
+                if (getStyleOption.Status != null)
                 {
-                    Expression<Func<Order,bool>> expression1 = o => o.Status == (int)getStyleOption.State1;
-                    expressions.Add(expression1);
-                }
-                if (getStyleOption.State2 != null)
-                {
-                    Expression<Func<Order, bool>> expression2 = o => o.Status == (int)getStyleOption.State2;
-                    expressions.Add(expression2);
-                }
-                if(expressions.Count > 0)
-                {
+                    List<Expression<Func<Order, bool>>> expressions = new List<Expression<Func<Order, bool>>>();
+                    foreach (var status in getStyleOption.Status)
+                    {
+                        Expression<Func<Order, bool>> expression = o => o.Status == (int)status;
+                        expressions.Add(expression);
+                    }
+
                     var param = Expression.Parameter(typeof(Order), "order");
                     Expression body = null;
                     foreach (var e in expressions)
@@ -113,6 +111,7 @@ namespace Fizz.SalesOrder.Extensions
                     var lambda = Expression.Lambda<Func<Order, bool>>(body, param);
 
                     ordersQuery = ordersQuery.Where(lambda);
+
                 }
                 
                 //日期范围查询
@@ -131,32 +130,48 @@ namespace Fizz.SalesOrder.Extensions
                     ordersQuery = ordersQuery.Where(o => o.UpdateUserDate >= getStyleOption.UpdateOrderDateRange.DateMin && o.UpdateUserDate <= getStyleOption.UpdateOrderDateRange.DateMax);
                 }
 
-                //根据物料编号查询       
+                //根据物料编号查询
+
+                //排序，默认按照创建日期倒序排序
+                if (getStyleOption.SortName == null)
+                {
+                    ordersQuery = ordersQuery.OrderByDescending(o => o.CreateUserDate);
+                }
+                else
+                {
+                    Type t = typeof(Order);
+                    PropertyInfo[] pi = t.GetProperties();
+                    PropertyInfo info = pi.Where(o => o.Name.ToLower() == getStyleOption.SortName.ToLower()).FirstOrDefault();
+
+                    //ordersQuery = ordersQuery.OrderBy(o => info.GetValue(o)).AsQueryable();
+
+                    ParameterExpression param = Expression.Parameter(typeof(Order), "order");
+                    MemberExpression s = Expression.Property(param, typeof(Order).GetProperty(info.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance));
+                    var lambda = Expression.Lambda<Func<Order, object>>(s, param);
+                    ordersQuery = ordersQuery.OrderBy(lambda);
+                }
+
+                //分页设置
+                pageSize = getStyleOption.PageSize ?? pageSize;
+                pageNum = getStyleOption.PageNum ?? pageNum;
+
             }
 
-            
-            //排序，默认按照创建日期倒序排序
-            if(sortName == null)
+            int count = ordersQuery.Count();
+            if(count == 0)
             {
-                ordersQuery = ordersQuery.OrderByDescending(o => o.CreateUserDate);
+                return new ResultMessage<OrderDetail> { Code = 400, Message = "没有符合查询的数据", ResultObject = null };
             }
-            else
+            decimal pageCount = Math.Ceiling((decimal)count / pageSize);
+          
+            if (pageNum > pageCount || pageNum <= 0)
             {
-                Type t = typeof(Order);
-                PropertyInfo[] pi = t.GetProperties();
-                PropertyInfo info = pi.Where(o => o.Name.ToLower() == sortName.ToLower()).FirstOrDefault();
-
-                //ordersQuery = ordersQuery.OrderBy(o => info.GetValue(o)).AsQueryable();
-
-                ParameterExpression param = Expression.Parameter(typeof(Order), "order");
-                MemberExpression s = Expression.Property(param, typeof(Order).GetProperty(info.Name,BindingFlags.IgnoreCase|BindingFlags.Public|BindingFlags.Instance));
-                var lambda = Expression.Lambda<Func<Order, object>>(s, param);
-                ordersQuery = ordersQuery.OrderBy(lambda);
+                return new ResultMessage<OrderDetail> { Code = 400, Message = "pageNum错误", ResultObject = null };
             }
 
             //分页
             ordersQuery = ordersQuery.Skip(pageSize * (pageNum - 1)).Take(pageSize);
-            return ordersQuery.ToList();
+            return new PageData<Order> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = ordersQuery.ToList()};
         }
     }
 }
