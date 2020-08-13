@@ -32,8 +32,6 @@
 
   `http://{host}/Fizz/SalesOrder?orderNo={orderNo}&pageSize={pageSize}&pageNum={pageNum}&sortName={sortName}`
 
-  header: userName
-
 - 获取某个销售订单：
 
   `http://{host}/Fizz/SalesOrder/{orderNo}`
@@ -46,24 +44,36 @@
 
 - 全部订单:
 
-` https://localhost:5001/Fizz/SalesOrder?sortname=no&pagesize=2&pagenum=2`
+` https://localhost:5001/Fizz/SalesOrder`
 
 ```json
 {
-    "pageCount": 2,
-    "pageNum": 2,
+    "pageCount": 1,
+    "pageNum": 1,
     "pageItems": [
         {
-            "no": "7",
+            "no": "33",
             "clientName": "le",
             "signDate": "2017-02-27T00:00:00",
             "status": 1,
             "comment": "6_s52",
             "orderDetails": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T14:36:18",
+            "createUserDate": "2020-08-13T13:36:08",
             "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T14:36:18"
+            "updateUserDate": "2020-08-13T13:36:08"
+        },
+        {
+            "no": "32",
+            "clientName": "le",
+            "signDate": "2017-02-27T00:00:00",
+            "status": 1,
+            "comment": "6_s52",
+            "orderDetails": null,
+            "createUserNo": "s52",
+            "createUserDate": "2020-08-13T11:11:06",
+            "updateUserNo": "s52",
+            "updateUserDate": "2020-08-13T11:11:06"
         }
     ]
 }
@@ -71,20 +81,20 @@
 
 - 某个订单
 
-` https://localhost:5001/Fizz/SalesOrder/5`
+` https://localhost:5001/Fizz/SalesOrder/32`
 
 ```json
 {
-    "no": "5",
+    "no": "32",
     "clientName": "le",
     "signDate": "2017-02-27T00:00:00",
     "status": 1,
     "comment": "6_s52",
     "orderDetails": null,
     "createUserNo": "s52",
-    "createUserDate": "2020-08-11T14:36:13",
+    "createUserDate": "2020-08-13T11:11:06",
     "updateUserNo": "s52",
-    "updateUserDate": "2020-08-11T14:36:13"
+    "updateUserDate": "2020-08-13T11:11:06"
 }
 ```
 
@@ -102,10 +112,10 @@
 
   ```json
 {
-    "no":"7",
-  "clientname":"le",
+    "no":"34",
+    "clientname":"le",
     "comment":"6_s52",
-  "status":1,
+    "status":1,
     "signdate":"2017-02-27"
 }
   ```
@@ -118,20 +128,16 @@
 
 ```json
 {
-    "code": 200,
-    "message": "OK",
-    "resultObject": {
-        "no": "7",
-        "clientName": "le",
-        "signDate": "2017-02-27T00:00:00",
-        "status": 1,
-        "comment": "6_s52",
-        "orderDetails": null,
-        "createUserNo": "s52",
-        "createUserDate": "2020-08-11T14:36:18.0721291+08:00",
-        "updateUserNo": "s52",
-        "updateUserDate": "2020-08-11T14:36:18.0721291+08:00"
-    }
+    "no": "34",
+    "clientName": "le",
+    "signDate": "2017-02-27T00:00:00",
+    "status": 1,
+    "comment": "6_s52",
+    "orderDetails": null,
+    "createUserNo": "s52",
+    "createUserDate": "2020-08-13T14:33:51.5013797+08:00",
+    "updateUserNo": "s52",
+    "updateUserDate": "2020-08-13T14:33:51.5013797+08:00"
 }
 ```
 
@@ -144,14 +150,12 @@
 
   http method: put
 
-  header: userName
-
   ```json
 {
     "status":0,
-  "comment":"upda",
+  "comment":"111",
     "signdate":"2020-02-27"
-}
+  }
   ```
 
 **请求方式：**
@@ -160,24 +164,20 @@
 
 **返回参数示例：**
 
-` https://localhost:5001/Fizz/SalesOrder/6`
+` https://localhost:5001/Fizz/SalesOrder/33`
 
 ```json
 {
-    "code": 200,
-    "message": "OK",
-    "resultObject": {
-        "no": "6",
-        "clientName": "le",
-        "signDate": "2020-02-27T00:00:00",
-        "status": 0,
-        "comment": "upda",
-        "orderDetails": null,
-        "createUserNo": "s52",
-        "createUserDate": "2020-08-11T14:10:23",
-        "updateUserNo": "fizz",
-        "updateUserDate": "2020-08-11T14:10:52.7235845+08:00"
-    }
+    "no": "33",
+    "clientName": "bz",
+    "signDate": "2020-02-27T00:00:00",
+    "status": 0,
+    "comment": "111",
+    "orderDetails": null,
+    "createUserNo": "s52",
+    "createUserDate": "2020-08-13T13:36:08",
+    "updateUserNo": "fizz",
+    "updateUserDate": "2020-08-13T14:34:41.7794059+08:00"
 }
 ```
 
@@ -186,9 +186,7 @@
 
 **URL示例：**
 
-- 删除订单：`http://{host}/Fizz/Sales/Order/{orderNo}`
-
-  header: userName
+- 删除订单：`http://{host}/Fizz/SalesOrder/{orderNo}`
 
 **请求方式：**
 
@@ -199,11 +197,7 @@
 ` https://localhost:5001/Fizz/SalesOrder/6`
 
 ```json
-{
-    "code": 200,
-    "message": "OK",
-    "resultObject": null
-}
+""
 ```
 
 ### 4.5获取订单明细
@@ -216,11 +210,6 @@
 
   `http://{host}/Fizz/SalesOrder/{orderNo}/OrderDetail/{detailNo}`
 
-- 获取一个用户的所有明细：
-
-  `http://{host}/Fizz/SalesOrder/{orderNo}/OrderDetail/user?pageSize={pageSize}&pageNum={pageNum}`
-
-  header: userName
 
 **请求方式：**
 
@@ -230,7 +219,7 @@
 
 - 获取一个订单下的所有明细
 
-` http://localhost:5000/Fizz/SalesOrder/6/OrderDetail`
+` http://localhost:5000/Fizz/SalesOrder/33/OrderDetail`
 
 ```json
 {
@@ -238,21 +227,7 @@
     "pageNum": 1,
     "pageItems": [
         {
-            "orderNo": "6",
-            "rowNo": 3,
-            "materialNo": "300",
-            "amount": 29.0,
-            "unit": "38",
-            "sortNo": null,
-            "comment": null,
-            "order": null,
-            "createUserNo": "s52",
-            "createUserDate": "2020-08-11T15:12:36",
-            "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T15:12:36"
-        },
-        {
-            "orderNo": "6",
+            "orderNo": "33",
             "rowNo": 4,
             "materialNo": "300",
             "amount": 29.0,
@@ -261,12 +236,12 @@
             "comment": null,
             "order": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T15:12:33",
+            "createUserDate": "2020-08-13T14:37:54",
             "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T15:12:33"
+            "updateUserDate": "2020-08-13T14:37:54"
         },
         {
-            "orderNo": "6",
+            "orderNo": "33",
             "rowNo": 5,
             "materialNo": "300",
             "amount": 29.0,
@@ -275,12 +250,12 @@
             "comment": null,
             "order": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T15:12:27",
+            "createUserDate": "2020-08-13T14:41:52",
             "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T15:12:27"
+            "updateUserDate": "2020-08-13T14:41:52"
         },
         {
-            "orderNo": "6",
+            "orderNo": "33",
             "rowNo": 6,
             "materialNo": "300",
             "amount": 29.0,
@@ -289,9 +264,9 @@
             "comment": null,
             "order": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T15:12:22",
+            "createUserDate": "2020-08-13T14:41:56",
             "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T15:12:22"
+            "updateUserDate": "2020-08-13T14:41:56"
         }
     ]
 }
@@ -299,12 +274,12 @@
 
 - 获取某个明细
 
-` http://localhost:5000/Fizz/SalesOrder/6/OrderDetail/3`
+` http://localhost:5000/Fizz/SalesOrder/33/OrderDetail/4`
 
 ```json
 {
-    "orderNo": "6",
-    "rowNo": 3,
+    "orderNo": "33",
+    "rowNo": 4,
     "materialNo": "300",
     "amount": 29.0,
     "unit": "38",
@@ -312,9 +287,9 @@
     "comment": null,
     "order": null,
     "createUserNo": "s52",
-    "createUserDate": "2020-08-11T15:12:36",
+    "createUserDate": "2020-08-13T14:37:54",
     "updateUserNo": "s52",
-    "updateUserDate": "2020-08-11T15:12:36"
+    "updateUserDate": "2020-08-13T14:37:54"
 }
 ```
 
@@ -328,12 +303,13 @@
 
   ```json
 {
-      "rowno":3,
-    "materialno":"300",
+      "rowno":4,
+      "materialno":"300",
       "amount":29,
-    "unit":"38"
+      "unit":"38"
   }
-```
+  
+  ```
 
 **请求方式：**
 
@@ -341,26 +317,22 @@
 
 **返回参数示例:**
 
-` https://localhost:5001/Fizz/SalesOrder/6/OrderDetail`
+` https://localhost:5001/Fizz/SalesOrder/33/OrderDetail`
 
-```json
+```
 {
-    "code": 200,
-    "message": "OK",
-    "resultObject": {
-        "orderNo": "6",
-        "rowNo": 3,
-        "materialNo": "300",
-        "amount": 29.0,
-        "unit": "38",
-        "sortNo": null,
-        "comment": null,
-        "order": null,
-        "createUserNo": "s52",
-        "createUserDate": "2020-08-11T15:12:36.2931482+08:00",
-        "updateUserNo": "s52",
-        "updateUserDate": "2020-08-11T15:12:36.2931482+08:00"
-    }
+    "orderNo": "33",
+    "rowNo": 4,
+    "materialNo": "300",
+    "amount": 29.0,
+    "unit": "38",
+    "sortNo": null,
+    "comment": null,
+    "order": null,
+    "createUserNo": "s52",
+    "createUserDate": "2020-08-13T14:37:54.0751952+08:00",
+    "updateUserNo": "s52",
+    "updateUserDate": "2020-08-13T14:37:54.0751952+08:00"
 }
 ```
 
@@ -374,11 +346,6 @@
 
   `http://{host}/Fizz/SalesOrder/{orderNo}/OrderDetail`
 
-- 删除一个用户下的所有明细
-
-  `http://{host}/Fizz/SalesOrder/{orderNo}/OrderDetail/user`
-
-  header: userName
 
 **请求方式：**
 
@@ -388,29 +355,21 @@
 
 - 删除一个明细
 
-  ` https://localhost:5001/Fizz/SalesOrder/6/OrderDetail/4`
+  ` https://localhost:5001/Fizz/SalesOrder/33/OrderDetail/4`
 
   ```json
-  {
-      "code": 200,
-      "message": "OK",
-      "resultObject": null
-  }
+  ""
   ```
 
-  
 
 - 删除一个订单下的所有明细
 
-  ` https://localhost:5001/Fizz/SalesOrder/6/OrderDetail/`
+  ` https://localhost:5001/Fizz/SalesOrder/33/OrderDetail/`
 
   ```json
-  {
-      "code": 200,
-      "message": "OK",
-      "resultObject": null
-  }
+  ""
   ```
+
 
 ### 4.8更新订单明细
 
@@ -424,13 +383,15 @@
 
   request body:
 
-  ```json
+  ```
   {
     "comment":"6_s52",
     "amount":200,
     "unit":"10"
   }
   ```
+  
+
 
 **请求方式：**
 
@@ -438,26 +399,22 @@
 
 **返回参数示例:**
 
-` https://localhost:5001/Fizz/SalesOrder/6/OrderDetail/4`
+` https://localhost:5001/Fizz/SalesOrder33/OrderDetail/4`
 
-```json
+```
 {
-    "code": 200,
-    "message": "OK",
-    "resultObject": {
-        "orderNo": "6",
-        "rowNo": 4,
-        "materialNo": "300",
-        "amount": 200.0,
-        "unit": "10",
-        "sortNo": null,
-        "comment": "6_s52",
-        "order": null,
-        "createUserNo": "s52",
-        "createUserDate": "2020-08-11T15:12:33",
-        "updateUserNo": "fizz",
-        "updateUserDate": "2020-08-11T15:21:21.7607747+08:00"
-    }
+    "orderNo": "33",
+    "rowNo": 4,
+    "materialNo": "300",
+    "amount": 200.0,
+    "unit": "10",
+    "sortNo": null,
+    "comment": "6_s52",
+    "order": null,
+    "createUserNo": "s52",
+    "createUserDate": "2020-08-13T14:37:54",
+    "updateUserNo": "fizz",
+    "updateUserDate": "2020-08-13T14:48:51.8050617+08:00"
 }
 ```
 
@@ -475,50 +432,53 @@
 
 **返回参数示例:**
 
-````json
+```
 {
     "pageCount": 1,
     "pageNum": 1,
     "pageItems": [
         {
-            "no": "5",
+            "no": "32",
             "clientName": "le",
             "signDate": "2017-02-27T00:00:00",
             "status": 1,
             "comment": "6_s52",
             "orderDetails": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T14:36:13",
+            "createUserDate": "2020-08-13T11:11:06",
             "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T14:36:13"
+            "updateUserDate": "2020-08-13T11:11:06"
         },
         {
-            "no": "6",
-            "clientName": "le",
-            "signDate": "2017-02-27T00:00:00",
-            "status": 1,
-            "comment": "6_s52",
+            "no": "33",
+            "clientName": "bz",
+            "signDate": "2020-02-27T00:00:00",
+            "status": 0,
+            "comment": "111",
             "orderDetails": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T14:36:02",
-            "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T14:36:02"
+            "createUserDate": "2020-08-13T13:36:08",
+            "updateUserNo": "fizz",
+            "updateUserDate": "2020-08-13T14:34:42"
         },
         {
-            "no": "7",
+            "no": "34",
             "clientName": "le",
             "signDate": "2017-02-27T00:00:00",
             "status": 1,
             "comment": "6_s52",
             "orderDetails": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T14:36:18",
+            "createUserDate": "2020-08-13T14:33:52",
             "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T14:36:18"
+            "updateUserDate": "2020-08-13T14:33:52"
         }
     ]
 }
-````
+```
+
+
+
 
 ### 4.10获取一个用户下的所有明细 
 
@@ -540,21 +500,21 @@
     "pageNum": 1,
     "pageItems": [
         {
-            "orderNo": "6",
-            "rowNo": 3,
+            "orderNo": "33",
+            "rowNo": 4,
             "materialNo": "300",
-            "amount": 29.0,
-            "unit": "38",
+            "amount": 200.0,
+            "unit": "10",
             "sortNo": null,
-            "comment": null,
+            "comment": "6_s52",
             "order": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T15:12:36",
-            "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T15:12:36"
+            "createUserDate": "2020-08-13T14:37:54",
+            "updateUserNo": "fizz",
+            "updateUserDate": "2020-08-13T14:48:52"
         },
         {
-            "orderNo": "6",
+            "orderNo": "33",
             "rowNo": 5,
             "materialNo": "300",
             "amount": 29.0,
@@ -563,12 +523,12 @@
             "comment": null,
             "order": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T15:12:27",
+            "createUserDate": "2020-08-13T14:41:52",
             "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T15:12:27"
+            "updateUserDate": "2020-08-13T14:41:52"
         },
         {
-            "orderNo": "6",
+            "orderNo": "33",
             "rowNo": 6,
             "materialNo": "300",
             "amount": 29.0,
@@ -577,9 +537,9 @@
             "comment": null,
             "order": null,
             "createUserNo": "s52",
-            "createUserDate": "2020-08-11T15:12:22",
+            "createUserDate": "2020-08-13T14:41:56",
             "updateUserNo": "s52",
-            "updateUserDate": "2020-08-11T15:12:22"
+            "updateUserDate": "2020-08-13T14:41:56"
         }
     ]
 }
@@ -600,10 +560,6 @@
 **返回参数示例:**
 
 ```json
-{
-    "code": 200,
-    "message": "OK",
-    "resultObject": null
-}
+""
 ```
 

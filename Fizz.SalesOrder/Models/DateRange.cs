@@ -7,7 +7,38 @@ namespace Fizz.SalesOrder.Models
 {
     public class DateRange
     {
-        public DateTime? DateMin { get; set; }
-        public DateTime? DateMax { get; set; }
+        private DateTime? dateMin;
+        public DateTime? DateMin
+        {
+            get
+            {
+                if (this.dateMin == null)
+                {
+                    this.dateMin = DateTime.MinValue;
+                }
+                return this.dateMin;
+            }
+            set
+            {
+                this.dateMin = value;
+            }
+        }
+
+        private DateTime? dateMax;
+        public DateTime? DateMax
+        {
+            get
+            {
+                if (this.dateMax == null)
+                {
+                    this.dateMax = DateTime.MaxValue;
+                }
+                return this.dateMax;
+            }
+            set
+            {
+                this.dateMax = value;
+            }
+        }
     }
 }

@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fizz.SalesOrder.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fizz.SalesOrder.Service
 {
     public interface IOrderService
     {
-        ResultMessage<Order> CreatOrder(string userName, Order order);
-        object QueryOrderAll(string name, MultipleGetStyleOption getStyleOption);
-        object QueryOrderByKey(string orderNo);   
-        ResultMessage<Order> DeleteOrderByKey(string userName, string orderNo);
-        ResultMessage<Order> UpdateOrder(string userName, string orderNo, Order order);
+        IActionResult CreatOrder(Order order);
+        IActionResult QueryOrder(MultipleGetStyleOption getStyleOption);
+        IActionResult QueryOrder(string orderNo);
+        IActionResult DeleteOrder(string orderNo);
+        IActionResult UpdateOrder(string orderNo, Order order);
 
     }
 }

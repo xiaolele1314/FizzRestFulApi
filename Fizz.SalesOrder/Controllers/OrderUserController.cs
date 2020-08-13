@@ -10,47 +10,45 @@ using System.Threading.Tasks;
 namespace Fizz.SalesOrder.Controllers
 {
 
-    [Produces("application/json")]
+    [Produces("application/json")] 
     [Route("Fizz/")]
     public class OrderUserController : ControllerBase
     {
-
-
-        private readonly SalesContext _context;
-
         private readonly IOrderUserService _orderUserService;
 
         public OrderUserController(SalesContext context, IOrderUserService service)
         {
-            this._context = context;
             this._orderUserService = service;
         }
 
+        //获取用户下的所有订单
+        //GET Fizz/OrderUser
         [HttpGet("OrderUser")]
-        public object GetByUser([FromHeader] string userName, [FromQuery] int? pageSize, [FromQuery] int? pageNum)
+        public IActionResult GetByUser1([FromQuery] int? pageSize, [FromQuery] int? pageNum)
         {
             pageSize = pageSize ?? 100;
             pageNum = pageNum ?? 1;
-            return _orderUserService.QureyOrderByUser(userName, pageSize, pageNum);
+            return _orderUserService.QureyOrderByUser(pageSize, pageNum);
         }
 
+        //删除用户下的所有明细
+        //DELETE Fizz/DetailUser
         [HttpDelete("DetailUser")]
-        public ResultMessage<OrderDetail> DeleteUser([FromHeader] string userName)
+        public IActionResult DeleteByUser()
         {
 
-            return _orderUserService.DeleteDetailByUser(userName);
+            return _orderUserService.DeleteDetailByUser();
 
         }
 
+        //获取用户下的所有明细
+        //GET Fizz/DetailUser
         [HttpGet("DetailUser")]
-        public object Get([FromHeader] string userName, [FromQuery] int? pageSize, [FromQuery] int? pageNum)
+        public IActionResult GetByUser2([FromQuery] int? pageSize, [FromQuery] int? pageNum)
         {
             pageSize = pageSize ?? 100;
             pageNum = pageNum ?? 1;
-            return _orderUserService.QueryDetailByUser(userName, pageSize, pageNum);
+            return _orderUserService.QueryDetailByUser(pageSize, pageNum);
         }
-
-
-
     }
 }

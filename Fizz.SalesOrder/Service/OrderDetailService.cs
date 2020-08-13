@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fizz.SalesOrder.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Fizz.SalesOrder.Interface;
 
 namespace Fizz.SalesOrder.Service
 {
@@ -13,67 +15,61 @@ namespace Fizz.SalesOrder.Service
     {
         private readonly SalesContext _context;
 
-        public OrderDetailService(SalesContext context)
+        private readonly IUserService _userService;
+        public OrderDetailService(SalesContext context, IUserService userService)
         {
             this._context = context;
-
+            this._userService = userService;
         }
 
 
-        public ResultMessage<OrderDetail> CreatOrderDetails(string userName, OrderDetail detail, string orderNo)
+        public IActionResult CreateDetail(OrderDetail detail, string orderNo)
         {
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
-
-            //判断销售订单是否存在
-            var f = user.OrderNos.Find(o => o == orderNo);
-
-            if (f == null)
+            if (_context.orders.AsNoTracking().Where(o => o.No == orderNo).Count() == 0)
             {
-                return new ResultMessage<OrderDetail> { Code = 203, Message = "该用户没有此销售订单", ResultObject = null };
+                return new JsonResult("销售订单不存在") { StatusCode = StatusCodes.Status400BadRequest };
             }
 
             if(_context.details.AsNoTracking().Where(o => o.RowNo == detail.RowNo && o.OrderNo == orderNo).FirstOrDefault() != null)
             {
-                return new ResultMessage<OrderDetail> { Code = 203, Message = "该订单明细已存在", ResultObject = null };
+                return new JsonResult("该订单明细已存在") { StatusCode = StatusCodes.Status400BadRequest };
             }
             //添加销售订单明细
             detail.OrderNo = orderNo;
 
             DateTime now = System.DateTime.Now;
-            detail.SetCommonValue(now, userName, now, userName);
 
             _context.Add(detail);
 
             _context.SaveChanges();
 
-            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = detail };
+            return new JsonResult(detail) { StatusCode = StatusCodes.Status200OK };
         }
 
 
 
-        public ResultMessage<OrderDetail> DeleteDetailByKey(string orderNo, int detailNo)
+        public IActionResult DeleteDetail(string orderNo, int detailNo)
         {
             var detail = _context.details.Find(new object[] { detailNo, orderNo});
 
             if(detail == null)
             {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "订单或明细不存在", ResultObject = null };
+                return new JsonResult("订单或明细不存在") { StatusCode = StatusCodes.Status400BadRequest };
             }
             _context.details.Remove(detail);
 
             _context.SaveChanges();
 
-            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = null };
+            return new JsonResult("") { StatusCode = StatusCodes.Status200OK };
         }
 
-        public ResultMessage<OrderDetail> DeleteDetailByOrder(string orderNo)
+        public IActionResult DeleteDetail(string orderNo)
         {
             var details = _context.details.Where(o => o.OrderNo == orderNo);
 
             if (details.Count() == 0)
             {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "订单或明细不存在", ResultObject = null };
+                return new JsonResult("订单或明细不存在") { StatusCode = StatusCodes.Status400BadRequest };
             }
 
             foreach (var item in details)
@@ -83,75 +79,65 @@ namespace Fizz.SalesOrder.Service
 
             _context.SaveChanges();
 
-            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = null };
+            return new JsonResult("") { StatusCode = StatusCodes.Status200OK };
         }
 
-        public object QueryDetailByKey(string orderNo, int detailNo )
+        public IActionResult QueryDetail(string orderNo, int detailNo )
         {
             var order = _context.details
                 .AsNoTracking()
                 .Where(o => o.RowNo == detailNo && o.OrderNo == orderNo)
                 .FirstOrDefault();
 
-            if(order == null)
-            {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "订单编号或明细不存在", ResultObject = null };
-            }
-            return order;
+            return new JsonResult(order) { StatusCode = StatusCodes.Status200OK }; ;
         }
 
-        public object QueryDetailByOrder(string orderNo, int? pageSize, int? pageNum)
+        public IActionResult QueryDetail(string orderNo, int? pageSize, int? pageNum)
         {
             var details = _context.details.AsNoTracking().Where(o => o.OrderNo == orderNo);
 
-            if(details.Count() == 0)
+            PageData<OrderDetail> pageData = null;
+
+            if(details.Count() > 0)
             {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "订单编号或明细不存在", ResultObject = null };
-            }
-           
+                decimal? pageCount = Math.Ceiling((decimal)((decimal)details.Count() / pageSize));
 
-            decimal? pageCount = Math.Ceiling((decimal)((decimal)details.Count() / pageSize));
+                if (pageNum > pageCount || pageNum <= 0)
+                {
+                    return new JsonResult("pageNum错误") { StatusCode = StatusCodes.Status400BadRequest };
 
-            if (pageNum > pageCount || pageNum <= 0)
-            {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "pageNum错误", ResultObject = null };
-            }
-            //分页查询
+                }
 
-            var orderPages = details
+                //分页查询
+                details = details
                 .Skip((int)(pageSize * (pageNum - 1)))
-                .Take((int)pageSize)
-                .ToList();
+                .Take((int)pageSize);
 
-            if (orderPages == null)
-            {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "订单编号或明细不存在", ResultObject = null };
+                pageData = new PageData<OrderDetail> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = details.ToList() };
             }
 
-            return new PageData<OrderDetail> { PageNum = pageNum, PageCount = (int)pageCount, PageItems = orderPages };
+            
+            return new JsonResult(pageData) { StatusCode = StatusCodes.Status200OK };
         }
      
-        public ResultMessage<OrderDetail> UpdateOrderDetail(string userName, string orderNo, int detailNo, OrderDetail detail)
+        public IActionResult UpdateDetail(string orderNo, int detailNo, OrderDetail detail)
         {
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
 
 
             if (detail.RowNo != 0)
             {
-                return new ResultMessage<OrderDetail> { Code = 203, Message = "不能修改项目号", ResultObject = null };
+                return new JsonResult("不能修改项目号") { StatusCode = StatusCodes.Status400BadRequest };
             }
 
             //判断明细是否存在
             var oldDetail = _context.details.Where(o => o.RowNo == detailNo && o.OrderNo == orderNo).AsNoTracking().FirstOrDefault();
             if (oldDetail == null)
             {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "订单或明细不存在", ResultObject = null };
+                return new JsonResult("订单编号或明细不存在") { StatusCode = StatusCodes.Status400BadRequest };
             }
 
             //修改明细数据
             DateTime now = System.DateTime.Now;
-            detail.SetCommonValue(detail.CreateUserDate, detail.CreateUserNo, now, userName);
             
             detail.OrderNo = orderNo;
             detail.RowNo = detailNo;
@@ -161,7 +147,7 @@ namespace Fizz.SalesOrder.Service
             var u = _context.details.Update(detail);
             _context.SaveChanges();
 
-            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = detail };
+            return new JsonResult(detail) { StatusCode = StatusCodes.Status200OK };
         }
 
        

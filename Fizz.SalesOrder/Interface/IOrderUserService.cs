@@ -1,4 +1,5 @@
 ﻿using Fizz.SalesOrder.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,8 @@ namespace Fizz.SalesOrder.Interface
 {
     public interface IOrderUserService
     {
-        object QureyOrderByUser(string userName, int? pageSize, int? pageNum);
-        object QueryDetailByUser(string userName, int? pageSize, int? pageNum);
-        ResultMessage<OrderDetail> DeleteDetailByUser(string userName);
+        IActionResult QureyOrderByUser(int? pageSize, int? pageNum);
+        IActionResult QueryDetailByUser(int? pageSize, int? pageNum);
+        IActionResult DeleteDetailByUser();
     }
 }

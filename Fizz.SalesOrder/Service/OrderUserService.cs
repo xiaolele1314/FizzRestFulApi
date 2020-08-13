@@ -1,5 +1,7 @@
 ﻿using Fizz.SalesOrder.Interface;
 using Fizz.SalesOrder.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,21 +14,20 @@ namespace Fizz.SalesOrder.Service
     {
         private readonly SalesContext _context;
 
-        public OrderUserService(SalesContext context)
+        private readonly IUserService _userService;
+        public OrderUserService(SalesContext context, IUserService userService)
         {
             this._context = context;
+            this._userService = userService;
         }
 
-        public ResultMessage<OrderDetail> DeleteDetailByUser(string userName)
+        public IActionResult DeleteDetailByUser()
         {
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
-
-            var details = _context.details.Where(o => user.OrderNos.Contains(o.OrderNo));
+            var details = _context.details.Where(o => o.CreateUserNo == this._userService.getUser());
 
             if (details.Count() == 0)
             {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "订单或明细不存在", ResultObject = null };
+                return new JsonResult("订单或明细不存在") { StatusCode = StatusCodes.Status400BadRequest };
             }
 
             foreach (var item in details)
@@ -36,59 +37,58 @@ namespace Fizz.SalesOrder.Service
 
             _context.SaveChanges();
 
-            return new ResultMessage<OrderDetail> { Code = 200, Message = "OK", ResultObject = null };
+            return new JsonResult("") { StatusCode = StatusCodes.Status200OK };
         }
 
-        public object QueryDetailByUser(string userName, int? pageSize, int? pageNum)
+        public IActionResult QueryDetailByUser(int? pageSize, int? pageNum)
         {
+            var details = _context.details.AsNoTracking().Where(o => o.CreateUserNo == this._userService.getUser());
 
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
+            PageData<OrderDetail> pageData = null;
 
-            var details = _context.details.AsNoTracking().Where(o => user.OrderNos.Contains(o.OrderNo));
-            if (details.Count() == 0)
+            if (details.Count() > 0)
             {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "该用户下没有订单或明细", ResultObject = null };
+                decimal pageCount = Math.Ceiling((decimal)((decimal)details.Count() / pageSize));
+
+                if (pageNum > pageCount || pageNum <= 0)
+                {
+                    return new JsonResult("pageNum错误") { StatusCode = StatusCodes.Status400BadRequest };
+                }
+                //分页查询
+
+                details = details
+                    .Skip((int)(pageSize * (pageNum - 1)))
+                    .Take((int)pageSize);
+
+                pageData = new PageData<OrderDetail> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = details.ToList() };
             }
-            decimal pageCount = Math.Ceiling((decimal)((decimal)details.Count() / pageSize));
+            
 
-            if (pageNum > pageCount || pageNum <= 0)
-            {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "pageNum错误", ResultObject = null };
-            }
-            //分页查询
-
-            var orderPages = details
-                .Skip((int)(pageSize * (pageNum - 1)))
-                .Take((int)pageSize)
-                .ToList();
-
-            if (orderPages == null)
-            {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "订单编号或明细不存在", ResultObject = null };
-            }
-
-            return new PageData<OrderDetail> { PageNum = pageNum, PageCount = (int)pageCount, PageItems = orderPages };
+            return new JsonResult(pageData) { StatusCode = StatusCodes.Status200OK };
         }
 
-        public object QureyOrderByUser(string userName, int? pageSize, int? pageNum)
+        public IActionResult QureyOrderByUser(int? pageSize, int? pageNum)
         {
+            var orders = _context.orders.AsNoTracking().Where(o => o.CreateUserNo == this._userService.getUser());
 
-            //获取用户
-            User user = CommonService.CreateUser(userName, null);
-
-            var ordersQuery = _context.orders.AsNoTracking().Where(o => o.CreateUserNo == userName);
-            int pageCount = (int)Math.Ceiling((decimal)((decimal)ordersQuery.Count() / pageSize));
-
-            if (pageNum > pageCount || pageNum <= 0)
+            PageData<Order> pageData = null;
+            if (orders.Count() > 0)
             {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "pageNum错误", ResultObject = null };
+                int pageCount = (int)Math.Ceiling((decimal)((decimal)orders.Count() / pageSize));
+
+                if (pageNum > pageCount || pageNum <= 0)
+                {
+                    return new JsonResult("pageNum错误") { StatusCode = StatusCodes.Status400BadRequest };
+                }
+
+                //分页查询            
+                orders = orders.Skip((int)(pageSize * (pageNum - 1))).Take((int)pageSize);
+
+                pageData = new PageData<Order> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = orders.ToList() };
             }
+            
 
-            //分页查询            
-            var orderPages = ordersQuery.Skip((int)(pageSize * (pageNum - 1))).Take((int)pageSize).ToList();
-
-            return new PageData<Order> { PageNum = pageNum, PageCount = pageCount, PageItems = orderPages };
+            return new JsonResult(pageData) { StatusCode = StatusCodes.Status200OK };
         }
 
     }

@@ -19,7 +19,7 @@ namespace Fizz.SalesOrder.Extensions
             salesOption.CreateUserNo = createSaleNo;
             salesOption.UpdateUserDate = updateSaleDate;
             salesOption.UpdateUserNo = updateSaleNo;
-            
+
         }
 
         //获取要更新列，通过赋值只更新改变的字段
@@ -27,11 +27,7 @@ namespace Fizz.SalesOrder.Extensions
         {
             T newObject = new T();
             Type t = newObject.GetType();
-
-            //把order属性及其值用dictionary存储起来
-            //Dictionary<string, object> dic = new Dictionary<string, object>();
             PropertyInfo[] pi = t.GetProperties();
-
 
             int len = pi.Length;
             for (int i = 0; i < len; i++)
@@ -46,132 +42,6 @@ namespace Fizz.SalesOrder.Extensions
             }
 
             return bodyObject;
-        }
-
-        //判断DateRange是否为空
-        public static bool JudgeDateRange(this DateRange dateRange)
-        {
-            if(dateRange != null && dateRange.DateMax != null && dateRange.DateMin != null)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        //多种查询并分页
-        public static object MultipleGet(this SalesContext orderContext, MultipleGetStyleOption getStyleOption)
-        {
-            int pageSize = 100;
-            int pageNum = 1;
-            var ordersQuery = orderContext.orders.AsNoTracking();
-            if(getStyleOption != null)
-            {
-                //模糊查询
-                if(getStyleOption.OrderNo != null)
-                {
-                    ordersQuery = ordersQuery.Where(o => o.No.Contains(getStyleOption.OrderNo));
-                }
-
-                if(getStyleOption.ClientName != null)
-                {
-                    ordersQuery = ordersQuery.Where(o => o.ClientName.Contains(getStyleOption.ClientName));
-                }
-
-                if(getStyleOption.Comment != null)
-                {
-                    ordersQuery = ordersQuery.Where(o => o.Comment.Contains(getStyleOption.Comment));
-                }
-
-                //状态查询   
-                if (getStyleOption.Status != null)
-                {
-                    List<Expression<Func<Order, bool>>> expressions = new List<Expression<Func<Order, bool>>>();
-                    foreach (var status in getStyleOption.Status)
-                    {
-                        Expression<Func<Order, bool>> expression = o => o.Status == (int)status;
-                        expressions.Add(expression);
-                    }
-
-                    var param = Expression.Parameter(typeof(Order), "order");
-                    Expression body = null;
-                    foreach (var e in expressions)
-                    {
-                        if (body != null)
-                        {
-                            body = Expression.OrElse(body, Expression.Invoke(e, param));
-                        }
-                        else
-                        {
-                            body = Expression.Invoke(e, param);
-                        }
-
-                    }
-
-                    var lambda = Expression.Lambda<Func<Order, bool>>(body, param);
-
-                    ordersQuery = ordersQuery.Where(lambda);
-
-                }
-                
-                //日期范围查询
-                if (getStyleOption.SignDateRange.JudgeDateRange())
-                {
-                    ordersQuery = ordersQuery.Where(o => o.SignDate >= getStyleOption.SignDateRange.DateMin && o.SignDate <= getStyleOption.SignDateRange.DateMax);
-                }
-
-                if (getStyleOption.CreateOrderDateRange.JudgeDateRange())
-                {
-                    ordersQuery = ordersQuery.Where(o => o.CreateUserDate >= getStyleOption.CreateOrderDateRange.DateMin && o.CreateUserDate <= getStyleOption.CreateOrderDateRange.DateMax);
-                }
-
-                if (getStyleOption.UpdateOrderDateRange.JudgeDateRange())
-                {
-                    ordersQuery = ordersQuery.Where(o => o.UpdateUserDate >= getStyleOption.UpdateOrderDateRange.DateMin && o.UpdateUserDate <= getStyleOption.UpdateOrderDateRange.DateMax);
-                }
-
-                //根据物料编号查询
-
-                //排序，默认按照创建日期倒序排序
-                if (getStyleOption.SortName == null)
-                {
-                    ordersQuery = ordersQuery.OrderByDescending(o => o.CreateUserDate);
-                }
-                else
-                {
-                    Type t = typeof(Order);
-                    PropertyInfo[] pi = t.GetProperties();
-                    PropertyInfo info = pi.Where(o => o.Name.ToLower() == getStyleOption.SortName.ToLower()).FirstOrDefault();
-
-                    //ordersQuery = ordersQuery.OrderBy(o => info.GetValue(o)).AsQueryable();
-
-                    ParameterExpression param = Expression.Parameter(typeof(Order), "order");
-                    MemberExpression s = Expression.Property(param, typeof(Order).GetProperty(info.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance));
-                    var lambda = Expression.Lambda<Func<Order, object>>(s, param);
-                    ordersQuery = ordersQuery.OrderBy(lambda);
-                }
-
-                //分页设置
-                pageSize = getStyleOption.PageSize ?? pageSize;
-                pageNum = getStyleOption.PageNum ?? pageNum;
-
-            }
-
-            int count = ordersQuery.Count();
-            if(count == 0)
-            {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "没有符合查询的数据", ResultObject = null };
-            }
-            decimal pageCount = Math.Ceiling((decimal)count / pageSize);
-          
-            if (pageNum > pageCount || pageNum <= 0)
-            {
-                return new ResultMessage<OrderDetail> { Code = 400, Message = "pageNum错误", ResultObject = null };
-            }
-
-            //分页
-            ordersQuery = ordersQuery.Skip(pageSize * (pageNum - 1)).Take(pageSize);
-            return new PageData<Order> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = ordersQuery.ToList()};
         }
     }
 }

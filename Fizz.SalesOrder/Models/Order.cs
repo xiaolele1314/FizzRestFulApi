@@ -35,9 +35,7 @@ namespace Fizz.SalesOrder.Models
         public string Comment { get; set; }
 
 
-
+        [NotMapped]
         public List<OrderDetail> OrderDetails { get; set; }
-        
-        //public OrderDetail Detail { get; set; }
     }
 }

@@ -19,6 +19,7 @@ using Org.BouncyCastle.Asn1.Cms;
 using AutoMapper;
 using Fizz.SalesOrder.Extensions;
 using Fizz.SalesOrder.Interface;
+using Fizz.SalesOrder.Controllers;
 
 namespace Fizz.SalesOrder
 {
@@ -31,36 +32,28 @@ namespace Fizz.SalesOrder
 
         public IConfiguration Configuration { get; }
 
-        //内存中创建用户
-        public static List<User> users { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<TodoContext>(opt =>
-            //  opt.UseInMemoryDatabase("TodoList"));
-
-            services.AddDbContext<SalesContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
-            //services.AddDbContext<OrderDetailContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
+         
+            //services.AddDbContext<SalesContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
+            services.AddDbContext<SalesContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbserver")));
+    
 
             services.AddMvc(options => { 
                     options.EnableEndpointRouting = false;
-                    options.Filters.Add<FizzSaleExceptionFilter>();
                 })   
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IOrderUserService, OrderUserService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<UserMiddleware>();
 
-            //services.AddAutoMapper();
 
-            services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
-            //初始化用户
-            users = CommonService.InitializeUsers(services);
-
-            
+            services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
             
         }
 
@@ -77,14 +70,7 @@ namespace Fizz.SalesOrder
 
             app.UseHttpsRedirection();
 
-            /*app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });*/
+            app.UseMiddleware<UserMiddleware>();
 
             app.UseMvc();
 

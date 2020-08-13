@@ -5,18 +5,80 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
+using Fizz.SalesOrder.Interface;
 
 namespace Fizz.SalesOrder.Models
 {
     public class SalesContext:DbContext
     {
+        private readonly IUserService userService;
+
         public static readonly LoggerFactory LoggerFactory =
                new LoggerFactory(new[] { new DebugLoggerProvider() });
 
-        public SalesContext(DbContextOptions<SalesContext> options)
+        public SalesContext(DbContextOptions<SalesContext> options, IUserService userService)
             : base(options)
         {
+            this.userService = userService;
+            //this.ChangeTracker.Tracked += (sender, entityStateChangedEventArgs) =>
+            //{
+            //    this.ChangeTracker.DetectChanges();
+            //    DateTime nowTime = DateTime.Now;
+            //    if (entityStateChangedEventArgs.Entry.State == EntityState.Added)
+            //    {
+            //        try
+            //        {
+            //            entityStateChangedEventArgs.Entry.Property("CreateUserNo").CurrentValue = "fizzNew";
+            //            entityStateChangedEventArgs.Entry.Property("CreateUserDate").CurrentValue = nowTime;
+            //            entityStateChangedEventArgs.Entry.Property("UpdateUserNo").CurrentValue = "fizzNew";
+            //            entityStateChangedEventArgs.Entry.Property("UpdateUserDate").CurrentValue = nowTime;
+            //        }
+            //        catch (InvalidOperationException)
+            //        {
 
+            //        }
+            //    }
+
+            //    if (entityStateChangedEventArgs.Entry.State == EntityState.Modified)
+            //    {
+            //        try
+            //        {
+            //            entityStateChangedEventArgs.Entry.Property("UpdateUserNo").CurrentValue = "fizzUpdate";
+            //            entityStateChangedEventArgs.Entry.Property("UpdateUserDate").CurrentValue = nowTime;
+            //        }
+            //        catch (InvalidOperationException)
+            //        {
+
+            //        }
+            //    }
+            //};
+        }
+
+
+        //重写savechanges方法
+        public override int SaveChanges()
+        {
+            DateTime nowTime = DateTime.Now;
+            this.ChangeTracker.DetectChanges();
+
+            foreach (var entity in this.ChangeTracker.Entries())
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    entity.Property("CreateUserNo").CurrentValue = this.userService.getUser();
+                    entity.Property("CreateUserDate").CurrentValue = nowTime;
+                    entity.Property("UpdateUserNo").CurrentValue = this.userService.getUser();
+                    entity.Property("UpdateUserDate").CurrentValue = nowTime;
+                }
+
+                if (entity.State == EntityState.Modified)
+                {
+
+                    entity.Property("UpdateUserNo").CurrentValue = this.userService.getUser();
+                    entity.Property("UpdateUserDate").CurrentValue = nowTime;
+                }
+            }
+            return base.SaveChanges();
         }
 
         public DbSet<Order> orders { get; set; }
@@ -29,17 +91,17 @@ namespace Fizz.SalesOrder.Models
                 .HasIndex(o => o.No)
                 .IsUnique();
 
-            modelBuilder.Entity<OrderDetail>()
-                .HasKey(o => new { o.RowNo, o.OrderNo });
+            modelBuilder.Entity<OrderDetail>(entity =>
+            {
+                entity.HasKey(o => new { o.RowNo, o.OrderNo });
 
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(d => d.Order)
-                .WithMany(o => o.OrderDetails)
-                .HasForeignKey(d => d.OrderNo);
+                entity.HasOne(d => d.Order)
+                    .WithMany(o => o.OrderDetails)
+                    .HasForeignKey(d => d.OrderNo);
 
-            modelBuilder.Entity<OrderDetail>()
-                .HasIndex(o => new { o.RowNo, o.OrderNo })
-                .IsUnique();
+                entity.HasIndex(o => new { o.RowNo, o.OrderNo })
+                    .IsUnique();
+            });
 
             base.OnModelCreating(modelBuilder);
         }

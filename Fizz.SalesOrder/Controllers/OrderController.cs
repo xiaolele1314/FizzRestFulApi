@@ -7,7 +7,8 @@ using Fizz.SalesOrder.Models;
 using Fizz.SalesOrder.Service;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
-
+using Microsoft.AspNetCore.Http;
+using Fizz.SalesOrder.Interface;
 
 namespace Fizz.SalesOrder.Controllers
 {
@@ -17,54 +18,52 @@ namespace Fizz.SalesOrder.Controllers
     public class OrderController : ControllerBase
     {
 
-
-        private readonly SalesContext _context;
-
         private readonly IOrderService _orderService;
 
-        public OrderController(SalesContext context, IOrderService service)
+        public OrderController(IOrderService service)
         {
-            this._context = context;
             this._orderService = service;
         }
 
-        // 创建用户，添加销售订单
-        // POST api/order
+        // 创建一个订单
+        // POST Fizz/SalesOrder/
         [HttpPost()]
-        public ResultMessage<Order> Post([FromHeader] string userName, [FromBody] Order order)
+        public IActionResult Post([FromBody] Order order)
         {
-            return _orderService.CreatOrder(userName, order);
+            return _orderService.CreatOrder(order);
         }
 
-        //查询用户所有销售订单
-        // GET api/order
+        //查询所有订单
+        // GET Fizz/SalesOrder/
         [HttpGet("")]
-        public object Get([FromHeader] string userName, [FromQuery]MultipleGetStyleOption getStyleOption)
+        public IActionResult Get([FromQuery]MultipleGetStyleOption getStyleOption)
         {
-            return _orderService.QueryOrderAll(userName, getStyleOption);
+            return _orderService.QueryOrder(getStyleOption);
         }
 
-        [HttpGet("{orderNo:int:length(1,10)}")]
-        public object Get(string orderNo)
+        //查询一个订单
+        //Get Fizz/SalesOrder/{orderNo}
+        [HttpGet("{orderNo}")]
+        public IActionResult Get(string orderNo)
         {
-            return _orderService.QueryOrderByKey(orderNo);
+            return _orderService.QueryOrder(orderNo);
         }
 
-        //删除用户所有订单和订单明细
-        // DELETE api/order
-        [HttpDelete("{orderNo:int:length(1,10)}")]
-        public ResultMessage<Order> DeleteUser([FromHeader] string userName, string orderNo)
+        //删除一个订单
+        // DELETE Fizz/SalesOrder/
+        [HttpDelete("{orderNo}")]
+        public IActionResult DeleteUser(string orderNo)
         {         
-           return _orderService.DeleteOrderByKey(userName, orderNo);
+           return _orderService.DeleteOrder(orderNo);
         }
 
 
-        //更新用户的销售单
-        // PUT api/order
-        [HttpPut("{orderNo:int:length(1,10)}")]
-        public ResultMessage<Order> Put([FromHeader] string userName,string orderNo, [FromBody] Order order)
+        // 更新一个订单
+        // PUT Fizz/SalesOrder/{orderNo}
+        [HttpPut("{orderNo}")]
+        public IActionResult Put(string orderNo, [FromBody] Order order)
         { 
-            return _orderService.UpdateOrder(userName, orderNo, order);
+            return _orderService.UpdateOrder(orderNo, order);
         }
 
         

@@ -48,6 +48,7 @@ namespace Fizz.SalesOrder.Models
         [Column(TypeName = ColumnTypes.NVarchar2000)]
         public string Comment { get; set; }
 
+        [NotMapped]
         public Order Order { get; set; }
     }
 }
