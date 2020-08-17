@@ -253,8 +253,6 @@ C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\bin\Debug\netcorea
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.csprojAssemblyReference.cache
-C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.csproj.ResolveComReference.cache
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.AssemblyInfoInputs.cache
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.AssemblyInfo.cs
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.csproj.CoreCompileInputs.cache
@@ -266,3 +264,4 @@ C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcorea
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.dll
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.pdb
 C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.genruntimeconfig.cache
+C:\Users\zhangle\source\repos\Fizz.SalesOrder\Fizz.SalesOrder\obj\Debug\netcoreapp3.1\Fizz.SalesOrder.csprojAssemblyReference.cache
