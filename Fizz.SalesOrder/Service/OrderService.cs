@@ -110,9 +110,7 @@ namespace Fizz.SalesOrder.Service
             var u = _context.orders.Update(order);
             _context.SaveChanges();
 
-            order.ClientName = "bz";
-            _context.orders.Update(order);
-            _context.SaveChanges();
+           
 
             return new JsonResult(order) { StatusCode = StatusCodes.Status200OK };
         }
