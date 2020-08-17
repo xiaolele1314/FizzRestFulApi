@@ -17,7 +17,7 @@ build-src:
   variables:
     PUBLISH_DIR: publish-$CI_PIPELINE_ID
   script:
-    - makedir -p $PWD/$PUBLISH_DIR
+    - mkdir -p $PWD/$PUBLISH_DIR
     - echo $PWD/$PUBLISH_DIR
     - dotnet publish -v q $PROJECT -c Release -o $PWD/$PUBLISH_DIR --version-suffix 1.0
     - cp -r tools/CI/Dockerfile $PUBLISHDIR
