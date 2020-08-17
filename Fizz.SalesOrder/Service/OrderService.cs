@@ -19,12 +19,12 @@ namespace Fizz.SalesOrder.Service
     {
         private readonly SalesContext _context;
 
-        private readonly IUserService _userService;
+        
 
-        public OrderService(SalesContext context, IUserService userService)
+        public OrderService(SalesContext context)
         {
             this._context = context;
-            this._userService = userService;
+            
         }
 
         public IActionResult CreatOrder(Order order)
@@ -39,6 +39,7 @@ namespace Fizz.SalesOrder.Service
             {
                 return new JsonResult("订单编号已经存在") { StatusCode = StatusCodes.Status400BadRequest};
             }
+
             _context.Add(order);
             _context.SaveChanges();
 
@@ -110,9 +111,9 @@ namespace Fizz.SalesOrder.Service
             var u = _context.orders.Update(order);
             _context.SaveChanges();
 
-            order.ClientName = "bz";
-            _context.orders.Update(order);
-            _context.SaveChanges();
+            //order.ClientName = "bz";
+            //_context.orders.Update(order);
+            //_context.SaveChanges();
 
             return new JsonResult(order) { StatusCode = StatusCodes.Status200OK };
         }

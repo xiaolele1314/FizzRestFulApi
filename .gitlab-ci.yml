@@ -1,0 +1,28 @@
+variables:
+   PROJECT: ./Fizz.SalesOrder.sln
+   PROJECT_NAME: FIZZ_SALES_ORDER
+stages:
+  - build-src
+
+
+build-src:
+  stage: build-src
+  tags:
+    - dotnet
+  only:
+    - fizzDev
+    - dev
+    - master
+  variables:
+    PUBLISH_DIR: publish-$CI_PIPELINE_ID
+  script:
+    - makedir -p $PWD/$PUBLISH_DIR
+    - echo $PWD/$PUBLISH_DIR
+    - dotnet publish -v q $PROJECT -c Release -o $PWD/$PUBLISH_DIR --version-suffix 1.0
+    - cp -r tools/CI/Dockerfile $PUBLISHDIR
+    - tar -cz -f $PROJECT_NAME.tar.gz -C $PUBLISH_DIR .
+  artifacts:
+    name: "$PROJECT_NAME"
+    path:
+      - $PROJECT_NAME.tar.gz
+
