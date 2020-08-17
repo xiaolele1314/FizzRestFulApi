@@ -1,6 +1,7 @@
 variables:
    PROJECT: ./Fizz.SalesOrder.sln
    PROJECT_NAME: FIZZ_SALES_ORDER
+   
 stages:
   - build-src
 
@@ -25,4 +26,3 @@ build-src:
     name: "$PROJECT_NAME"
     path:
       - $PROJECT_NAME.tar.gz
-
