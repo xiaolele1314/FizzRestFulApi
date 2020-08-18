@@ -7,7 +7,7 @@ variables:
 stages:
   - build_src
   - build_img
-
+  - push_image
 
 build_src:
   stage: build_src
@@ -48,3 +48,17 @@ build_image:
     - docker build --tag $IMAGE_FULL_NAME $DOCKER_BUILD_DIR
   dependencies:
     - build_src
+
+push_image:
+  stage: push_image
+  tags:
+    - docker
+  only:
+    - master
+    - dev
+  variables:
+    IMAGE_TAG: nightly
+    LATEST: 'false'
+    PUSH_VERSION: $CI_PIPELINE_ID
+  script:
+    - docker image push $CURRENT_PUSH_IMAGE_NAME > /dev/null
