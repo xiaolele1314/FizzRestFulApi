@@ -62,4 +62,4 @@ push_image:
     LATEST: 'false'
     PUSH_VERSION: $CI_PIPELINE_ID
   script:
-    - docker image push $CURRENT_PUSH_IMAGE_NAME > /dev/null
+    - docker image push $IMAGE_FULL_NAME > /dev/null
