@@ -5,7 +5,7 @@
   },
   "projects": {
     "C:\\Users\\zhangle\\source\\repos\\Fizz.SalesOrder\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.0-1.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\zhangle\\source\\repos\\Fizz.SalesOrder\\Fizz.SalesOrder\\Fizz.SalesOrder.csproj",
         "projectName": "Fizz.SalesOrder",
