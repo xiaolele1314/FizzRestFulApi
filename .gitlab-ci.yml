@@ -3,6 +3,7 @@ variables:
    PROJECT_NAME: FIZZ_SALES_ORDER
    IMAGE_PREFIX: fizz
    IMAGE_NAME: order
+   REGISTRY_HOST: hub.iubang.com:5000
 
 stages:
   - build_src
@@ -61,6 +62,13 @@ push_image:
     IMAGE_TAG: nightly
     LATEST: 'false'
     PUSH_VERSION: $CI_PIPELINE_ID
-    CURRENT_PUSH_IMAGE_NAME: $IMAGE_PREFIX/$IMAGE_NAME:$IMAGE_TAG
+    IMAGE_FULL_NAME: $IMAGE_PREFIX/$IMAGE_NAME
+    CURRENT_PUSH_IMAGE_NAME: $REGISTRY_HOST/$IMAGE_FULL_NAME:$IMAGE_TAG
   script:
     - docker image push $CURRENT_PUSH_IMAGE_NAME > /dev/null
+    - dokcer image tag $IMAGE_FULL_NAME $CURRENT_PUSH_IMAGE_NAME
+    - docker image rm $CURRENT_PUSH_IMAGE_NAME
+    - CURRENT_PUSH_IMAGE_NAME=$CURRENT_PUSH_IMAGE_NAME-$CI_PIPELINE_ID
+    - docker image push $CURRENT_PUSH_IMAGE_NAME > /dev/null
+    - dokcer image tag $IMAGE_FULL_NAME $CURRENT_PUSH_IMAGE_NAME
+    - docker image rm $CURRENT_PUSH_IMAGE_NAME
