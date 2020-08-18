@@ -54,6 +54,7 @@ push_image:
   tags:
     - docker
   only:
+    - fizzDev
     - master
     - dev
   variables:
