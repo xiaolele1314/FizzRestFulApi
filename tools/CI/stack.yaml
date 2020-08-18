@@ -1,0 +1,28 @@
+version: '3.6'
+
+networks:
+  overlay:
+    driver: overlay
+    attachable: true
+  
+services:
+  fizz-ord:
+    image: hub.iubang.com:5000/trials/fizz/ord:${TAG:-nightly}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "100"
+    networks:
+      - overlay   
+    deploy:
+      resources:
+        limits:
+          memory: 900M
+      mode: replicated 
+      replicas: ${REPLICA:-2}
+      update_config:
+        failure_action: rollback
+        order: start-first
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASP_ENV:-Nightly}

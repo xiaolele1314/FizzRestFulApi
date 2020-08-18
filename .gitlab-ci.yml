@@ -4,11 +4,13 @@ variables:
    IMAGE_PREFIX: trials/fizz
    IMAGE_NAME: ord
    REGISTRY_HOST: hub.iubang.com:5000
-
+   DEPLOY_TARGET: gitlab-runner@byzan.cxist.com
+   STACK_NAME: byz-trials
 stages:
   - build_src
   - build_img
   - push_image
+  - deploy
 
 build_src:
   stage: build_src
@@ -73,3 +75,18 @@ push_image:
     - docker image tag $IMAGE_FULL_NAME $CURRENT_PUSH_IMAGE_NAME
     - docker image push $CURRENT_PUSH_IMAGE_NAME > /dev/null
     - docker image rm $CURRENT_PUSH_IMAGE_NAME
+
+deploy:
+  stage: deploy
+  tags:
+    - dotnet
+  only:
+    - master
+    - dev
+  variables:
+    STACK_DIR: byzan-deploy/fizz/ord
+    STACK_FILE: stack.yaml
+  script:
+    - ssh -q $DEPLOY_TARGET "mkdir -p ~/$STACK_DIR"
+    - scp -q tools/CI/$STACK_FILE $DEPLOY_TARGET:~/$STACK_DIR
+    - ssh $DEPLOY_TARGET "docker stack deploy --compose-file ~/$STACK_DIR/$STACK_FILE $STACK_NAME"
