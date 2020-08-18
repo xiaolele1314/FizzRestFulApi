@@ -33,7 +33,7 @@ build-src:
 build-image:
   stage: build-img
   tags:
-    - dotnet
+    - docker
   only:
     - fizzDev
     - dev
