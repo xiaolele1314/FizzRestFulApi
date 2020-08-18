@@ -44,7 +44,7 @@ build_image:
   script:
     - mkdir -p $DOCKER_BUILD_DIR
     - IMAGE_FULL_NAME=$IMAGE_PREFIX/$IMAGE_NAME:$IMAGE_TAG
-    - tar -xzf $PROJRCT_NAME.tar.gz -C $DOCKER_BUILD_DIR
+    - tar -xzf $PROJECT_NAME.tar.gz -C $DOCKER_BUILD_DIR
     - docker build --tag $IMAGE_FULL_NAME $DOCKER_BUILD_DIR
   dependencies:
     - build_src
