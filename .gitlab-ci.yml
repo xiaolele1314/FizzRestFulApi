@@ -1,8 +1,8 @@
 variables:
    PROJECT: ./Fizz.SalesOrder.sln
    PROJECT_NAME: FIZZ_SALES_ORDER
-   IMAGE_PREFIX: fizz
-   IMAGE_NAME: order
+   IMAGE_PREFIX: trials/fizz
+   IMAGE_NAME: ord
    REGISTRY_HOST: hub.iubang.com:5000
 
 stages:
