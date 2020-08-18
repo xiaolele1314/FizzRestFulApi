@@ -5,12 +5,12 @@ variables:
    IMAGE_NAME: order
 
 stages:
-  - build-src
-  - build-img
+  - build_src
+  - build_img
 
 
-build-src:
-  stage: build-src
+build_src:
+  stage: build_src
   tags:
     - dotnet
   only:
@@ -30,8 +30,8 @@ build-src:
     paths:
       - $PROJECT_NAME.tar.gz
 
-build-image:
-  stage: build-img
+build_image:
+  stage: build_img
   tags:
     - docker
   only:
