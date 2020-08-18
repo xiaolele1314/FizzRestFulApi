@@ -61,5 +61,6 @@ push_image:
     IMAGE_TAG: nightly
     LATEST: 'false'
     PUSH_VERSION: $CI_PIPELINE_ID
+    CURRENT_PUSH_IMAGE_NAME: $IMAGE_PREFIX/$IMAGE_NAME:$IMAGE_TAG
   script:
-    - docker image push $IMAGE_FULL_NAME > /dev/null
+    - docker image push $CURRENT_PUSH_IMAGE_NAME > /dev/null
