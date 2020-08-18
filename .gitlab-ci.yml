@@ -65,6 +65,7 @@ push_image:
     IMAGE_FULL_NAME: $IMAGE_PREFIX/$IMAGE_NAME
     CURRENT_PUSH_IMAGE_NAME: $REGISTRY_HOST/$IMAGE_FULL_NAME:$IMAGE_TAG
   script:
+    - echo "$CURRENT_PUSH_IMAGE_NAME"
     - docker image push $CURRENT_PUSH_IMAGE_NAME > /dev/null
     - dokcer image tag $IMAGE_FULL_NAME $CURRENT_PUSH_IMAGE_NAME
     - docker image rm $CURRENT_PUSH_IMAGE_NAME
