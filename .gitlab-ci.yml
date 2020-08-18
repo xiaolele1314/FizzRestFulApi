@@ -1,9 +1,12 @@
 variables:
    PROJECT: ./Fizz.SalesOrder.sln
    PROJECT_NAME: FIZZ_SALES_ORDER
+   IMAGE_PREFIX: fizz
+   IMAGE_NAME: order
 
 stages:
   - build-src
+  - build-img
 
 
 build-src:
@@ -26,3 +29,23 @@ build-src:
     name: "$PROJECT_NAME"
     paths:
       - $PROJECT_NAME.tar.gz
+
+build-image:
+  stage: build-img
+  tags:
+    - dotnet
+  only:
+    - fizzDev
+    - dev
+    - master
+  variables:
+    IMAGE_TAG: nightly
+    DOCKER_BUILD_DIR: docker_build_$CI_PIPELINE_ID
+  script:
+    - mkdir -p $DOCKER_BUILD_DIR
+    - IMAGE_FULL_NAME=$IMAGE_PREFIX/$IMAGE_NAME:$IMAGE_TAG
+    - tar -xzf $PROJRCT_NAME.tar.gz -C $DOCKER_BUILD_DIR
+    - docker build --tag $IMAGE_FULL_NAME $DOCKER_BUILD_DIR
+  dependencies:
+    - build_src
+  
