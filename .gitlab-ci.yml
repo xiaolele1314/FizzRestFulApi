@@ -1,7 +1,7 @@
 variables:
    PROJECT: ./Fizz.SalesOrder.sln
    PROJECT_NAME: FIZZ_SALES_ORDER
-   IMAGE_PREFIX: trials/fizz
+   IMAGE_PREFIX: trials/s52
    IMAGE_NAME: ord
    REGISTRY_HOST: hub.iubang.com:5000
    DEPLOY_TARGET: gitlab-runner@byzan.cxist.com
