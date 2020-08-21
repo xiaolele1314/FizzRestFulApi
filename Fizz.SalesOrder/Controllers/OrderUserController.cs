@@ -24,30 +24,24 @@ namespace Fizz.SalesOrder.Controllers
         //获取用户下的所有订单
         //GET Fizz/OrderUser
         [HttpGet("OrderUser")]
-        public IActionResult GetByUser1([FromQuery] int? pageSize, [FromQuery] int? pageNum)
+        public IActionResult GetOrder([FromQuery] int? pageSize, [FromQuery] int? pageNum)
         {
-            pageSize = pageSize ?? 100;
-            pageNum = pageNum ?? 1;
             return _orderUserService.QureyOrderByUser(pageSize, pageNum);
         }
 
         //删除用户下的所有明细
         //DELETE Fizz/DetailUser
         [HttpDelete("DetailUser")]
-        public IActionResult DeleteByUser()
+        public IActionResult DeletOrdere()
         {
-
             return _orderUserService.DeleteDetailByUser();
-
         }
 
         //获取用户下的所有明细
         //GET Fizz/DetailUser
         [HttpGet("DetailUser")]
-        public IActionResult GetByUser2([FromQuery] int? pageSize, [FromQuery] int? pageNum)
+        public IActionResult GetDetail([FromQuery] int? pageSize, [FromQuery] int? pageNum)
         {
-            pageSize = pageSize ?? 100;
-            pageNum = pageNum ?? 1;
             return _orderUserService.QueryDetailByUser(pageSize, pageNum);
         }
     }

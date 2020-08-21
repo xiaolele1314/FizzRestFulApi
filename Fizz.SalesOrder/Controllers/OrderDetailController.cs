@@ -46,15 +46,13 @@ namespace Fizz.SalesOrder.Controllers
         [HttpGet("")]
         public IActionResult Get(string orderNo, [FromQuery] int? pageSize, [FromQuery] int? pageNum)
         {
-            pageNum = pageNum ?? 1;
-            pageSize = pageSize ?? 100;
             return _detailService.QueryDetail(orderNo, pageSize, pageNum);
         }
 
         //删除一个明细
         // DELETE Fizz/SalesOrder/{orderNo}/OrderDetail/{detailNo}
         [HttpDelete("{detailNo:int:length(1,10)}")]
-        public IActionResult DeleteUser(string orderNo, int detailNo)
+        public IActionResult Delete(string orderNo, int detailNo)
         {
 
             return _detailService.DeleteDetail(orderNo, detailNo);
@@ -63,7 +61,7 @@ namespace Fizz.SalesOrder.Controllers
         //删除一个订单下的所有明细
         //DELETE Fizz/SalesOrder/{orderNo}/OrderDetail/
         [HttpDelete("")]
-        public IActionResult DeleteByOrderNo(string orderNo)
+        public IActionResult Delete(string orderNo)
         {
              return _detailService.DeleteDetail(orderNo);
 
@@ -72,9 +70,9 @@ namespace Fizz.SalesOrder.Controllers
         //更新一个明细
         // PUT Fizz/SalesOrder/{orderNo}/OrderDetail/
         [HttpPut("{detailNo:int:length(1,10)}")]
-        public IActionResult Put(string orderNo, int detailNo, [FromBody] OrderDetail detail)
+        public IActionResult Put(string orderNo, int detailNo, [FromBody] OrderDetailDto detailDto)
         {
-           return _detailService.UpdateDetail(orderNo, detailNo, detail);
+           return _detailService.UpdateDetail(orderNo, detailNo, detailDto);
         }
 
     }

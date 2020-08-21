@@ -52,7 +52,7 @@ namespace Fizz.SalesOrder.Controllers
         //删除一个订单
         // DELETE Fizz/SalesOrder/
         [HttpDelete("{orderNo}")]
-        public IActionResult DeleteUser(string orderNo)
+        public IActionResult Delete(string orderNo)
         {         
            return _orderService.DeleteOrder(orderNo);
         }
@@ -61,9 +61,9 @@ namespace Fizz.SalesOrder.Controllers
         // 更新一个订单
         // PUT Fizz/SalesOrder/{orderNo}
         [HttpPut("{orderNo}")]
-        public IActionResult Put(string orderNo, [FromBody] Order order)
+        public IActionResult Put(string orderNo, [FromBody] OrderDto orderDto)
         { 
-            return _orderService.UpdateOrder(orderNo, order);
+            return _orderService.UpdateOrder(orderNo, orderDto);
         }
 
         

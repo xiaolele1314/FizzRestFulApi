@@ -1,4 +1,6 @@
 ﻿using Fizz.SalesOrder.Models;
+using Fizz.SalesOrder.Service;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +44,141 @@ namespace Fizz.SalesOrder.Extensions
             }
 
             return bodyObject;
+        }
+
+        //automapper更新改变字段
+        public static T UpdateChangedFieldByAutoMapper<T>(this T source, T destination)
+        {
+
+            return destination;
+        }
+
+        //扩展分页方法
+        public static IActionResult PageSales<T>(this IQueryable<T> source, int? pageSize, int? pageNum)
+        {
+            PageData<T> pageData = null;
+            if (source.Count() > 0)
+            {
+                int pageCount = (int)Math.Ceiling((decimal)((decimal)source.Count() / pageSize));
+
+                if (pageNum > pageCount || pageNum <= 0)
+                {
+                    return CommonService.FailResult("pageNum错误");
+                }
+
+                //分页查询            
+                source = source.Skip((int)(pageSize * (pageNum - 1))).Take((int)pageSize);
+
+                pageData = new PageData<T> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = source.ToList() };
+            }
+
+
+            return CommonService.SuccessResult(pageData);
+        }
+
+        //扩展参数查询方法
+        public static IActionResult FindByOptions(this IQueryable<Order> source, MultipleGetStyleOption getStyleOption)
+        {
+            //范围查询
+            source = source.Where(o => o.SignDate >= getStyleOption.SignDateRange.DateMin && o.SignDate <= getStyleOption.SignDateRange.DateMax);
+            source = source.Where(o => o.CreateUserDate >= getStyleOption.CreateOrderDateRange.DateMin && o.CreateUserDate <= getStyleOption.CreateOrderDateRange.DateMax);
+            source = source.Where(o => o.UpdateUserDate >= getStyleOption.UpdateOrderDateRange.DateMin && o.UpdateUserDate <= getStyleOption.UpdateOrderDateRange.DateMax);
+
+            //状态查询
+            source = source.Where(ListLambda(getStyleOption.Status.ToList()));
+
+            //模糊查询
+            if (getStyleOption.OrderNo != null)
+            {
+                source = source.Where(o => o.No.Contains(getStyleOption.OrderNo));
+            }
+
+            if (getStyleOption.ClientName != null)
+            {
+                source = source.Where(o => o.ClientName.Contains(getStyleOption.ClientName));
+            }
+
+            if (getStyleOption.Comment != null)
+            {
+                source = source.Where(o => o.Comment.Contains(getStyleOption.Comment));
+            }
+
+            //排序
+            source = SortSales(source, getStyleOption.SortStr);
+
+            //分页
+            return source.PageSales<Order>(getStyleOption.PageSize, getStyleOption.PageNum);
+        }
+
+        //扩展排序方法
+        public static IQueryable<Order> SortSales(this IQueryable<Order> source, string sortStr)
+        {
+
+            string[] options = sortStr.Split(" ");
+
+            string sortName = options[0];
+            string sortType = "desc";
+
+            if (options.Length > 1)
+            {
+                sortType = options[1].ToLower() ?? sortType;
+            }
+
+            Type t = typeof(Order);
+            PropertyInfo[] pi = t.GetProperties();
+            PropertyInfo info = pi.Where(o => o.Name.ToLower() == sortName.ToLower()).FirstOrDefault();
+
+            if (info == null)
+            {
+                source = source.OrderByDescending(o => o.CreateUserDate);
+            }
+            else
+            {
+                ParameterExpression param = Expression.Parameter(typeof(Order), "o");
+                MemberExpression s = Expression.Property(param, typeof(Order).GetProperty(info.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance));
+                var lambda = Expression.Lambda<Func<Order, object>>(Expression.Convert(s, typeof(object)), param);
+
+                if (sortType == "asc")
+                {
+                    source = source.OrderBy(lambda);
+                }
+                else
+                {
+                    source = source.OrderByDescending(lambda);
+                }
+
+            }
+
+            return source;
+        }
+
+        //扩展list表达式树
+        public static Expression<Func<Order, bool>> ListLambda(this List<OrderStatusEnum> list)
+        {
+            List<Expression<Func<Order, bool>>> expressions = new List<Expression<Func<Order, bool>>>();
+            foreach (var status in list)
+            {
+                Expression<Func<Order, bool>> expression = o => o.Status == (int)status;
+                expressions.Add(expression);
+            }
+
+            var param = Expression.Parameter(typeof(Order), "order");
+            Expression body = null;
+            foreach (var e in expressions)
+            {
+                if (body != null)
+                {
+                    body = Expression.OrElse(body, Expression.Invoke(e, param));
+                }
+                else
+                {
+                    body = Expression.Invoke(e, param);
+                }
+
+            }
+            var lambda = Expression.Lambda<Func<Order, bool>>(body, param);
+
+            return lambda;
         }
     }
 }

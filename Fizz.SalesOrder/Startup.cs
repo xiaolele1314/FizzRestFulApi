@@ -37,7 +37,6 @@ namespace Fizz.SalesOrder
         public void ConfigureServices(IServiceCollection services)
         {
          
-            //services.AddDbContext<SalesContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbconn")));
             services.AddDbContext<SalesContext>(options => options.UseMySQL(Configuration.GetConnectionString("dbserver")));
     
 
@@ -51,10 +50,9 @@ namespace Fizz.SalesOrder
             services.AddScoped<IOrderUserService, OrderUserService>();
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton<UserMiddleware>();
+            services.AddAutoMapper(typeof(AutoMapperConfigs));
 
-
-            services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
-            
+            services.AddControllers().AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +66,7 @@ namespace Fizz.SalesOrder
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseMiddleware<UserMiddleware>();
 

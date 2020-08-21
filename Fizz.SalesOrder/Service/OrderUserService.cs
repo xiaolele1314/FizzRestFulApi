@@ -1,4 +1,5 @@
-﻿using Fizz.SalesOrder.Interface;
+﻿using Fizz.SalesOrder.Extensions;
+using Fizz.SalesOrder.Interface;
 using Fizz.SalesOrder.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Fizz.SalesOrder.Service
 {
-    public class OrderUserService:IOrderUserService
+    public class OrderUserService : IOrderUserService
     {
         private readonly SalesContext _context;
 
@@ -27,7 +28,7 @@ namespace Fizz.SalesOrder.Service
 
             if (details.Count() == 0)
             {
-                return new JsonResult("订单或明细不存在") { StatusCode = StatusCodes.Status400BadRequest };
+                return CommonService.FailResult("订单或明细不存在");
             }
 
             foreach (var item in details)
@@ -37,58 +38,26 @@ namespace Fizz.SalesOrder.Service
 
             _context.SaveChanges();
 
-            return new JsonResult("") { StatusCode = StatusCodes.Status200OK };
+            return CommonService.SuccessResult("");
         }
 
         public IActionResult QueryDetailByUser(int? pageSize, int? pageNum)
         {
+            pageSize = pageSize ?? 100;
+            pageNum = pageNum ?? 1;
+
             var details = _context.details.AsNoTracking().Where(o => o.CreateUserNo == this._userService.getUser());
 
-            PageData<OrderDetail> pageData = null;
-
-            if (details.Count() > 0)
-            {
-                decimal pageCount = Math.Ceiling((decimal)((decimal)details.Count() / pageSize));
-
-                if (pageNum > pageCount || pageNum <= 0)
-                {
-                    return new JsonResult("pageNum错误") { StatusCode = StatusCodes.Status400BadRequest };
-                }
-                //分页查询
-
-                details = details
-                    .Skip((int)(pageSize * (pageNum - 1)))
-                    .Take((int)pageSize);
-
-                pageData = new PageData<OrderDetail> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = details.ToList() };
-            }
-            
-
-            return new JsonResult(pageData) { StatusCode = StatusCodes.Status200OK };
+            return details.PageSales<OrderDetail>(pageSize, pageNum);
         }
 
         public IActionResult QureyOrderByUser(int? pageSize, int? pageNum)
         {
+            pageSize = pageSize ?? 100;
+            pageNum = pageNum ?? 1;
             var orders = _context.orders.AsNoTracking().Where(o => o.CreateUserNo == this._userService.getUser());
 
-            PageData<Order> pageData = null;
-            if (orders.Count() > 0)
-            {
-                int pageCount = (int)Math.Ceiling((decimal)((decimal)orders.Count() / pageSize));
-
-                if (pageNum > pageCount || pageNum <= 0)
-                {
-                    return new JsonResult("pageNum错误") { StatusCode = StatusCodes.Status400BadRequest };
-                }
-
-                //分页查询            
-                orders = orders.Skip((int)(pageSize * (pageNum - 1))).Take((int)pageSize);
-
-                pageData = new PageData<Order> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = orders.ToList() };
-            }
-            
-
-            return new JsonResult(pageData) { StatusCode = StatusCodes.Status200OK };
+            return orders.PageSales<Order>(pageSize, pageNum);
         }
 
     }

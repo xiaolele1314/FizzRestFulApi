@@ -20,38 +20,6 @@ namespace Fizz.SalesOrder.Models
             : base(options)
         {
             this.userService = userService;
-            //this.ChangeTracker.Tracked += (sender, entityStateChangedEventArgs) =>
-            //{
-            //    this.ChangeTracker.DetectChanges();
-            //    DateTime nowTime = DateTime.Now;
-            //    if (entityStateChangedEventArgs.Entry.State == EntityState.Added)
-            //    {
-            //        try
-            //        {
-            //            entityStateChangedEventArgs.Entry.Property("CreateUserNo").CurrentValue = "fizzNew";
-            //            entityStateChangedEventArgs.Entry.Property("CreateUserDate").CurrentValue = nowTime;
-            //            entityStateChangedEventArgs.Entry.Property("UpdateUserNo").CurrentValue = "fizzNew";
-            //            entityStateChangedEventArgs.Entry.Property("UpdateUserDate").CurrentValue = nowTime;
-            //        }
-            //        catch (InvalidOperationException)
-            //        {
-
-            //        }
-            //    }
-
-            //    if (entityStateChangedEventArgs.Entry.State == EntityState.Modified)
-            //    {
-            //        try
-            //        {
-            //            entityStateChangedEventArgs.Entry.Property("UpdateUserNo").CurrentValue = "fizzUpdate";
-            //            entityStateChangedEventArgs.Entry.Property("UpdateUserDate").CurrentValue = nowTime;
-            //        }
-            //        catch (InvalidOperationException)
-            //        {
-
-            //        }
-            //    }
-            //};
         }
 
 

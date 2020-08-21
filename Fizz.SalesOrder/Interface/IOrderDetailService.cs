@@ -14,6 +14,6 @@ namespace Fizz.SalesOrder.Service
         IActionResult QueryDetail(string orderNo, int? pageSize, int? pageNum);
         IActionResult DeleteDetail(string orderNo, int detailNo);
         IActionResult DeleteDetail(string orderNo);
-        IActionResult UpdateDetail(string orderNo, int detailNo, OrderDetail detail);
+        IActionResult UpdateDetail(string orderNo, int detailNo, OrderDetailDto detailDto);
     }
 }

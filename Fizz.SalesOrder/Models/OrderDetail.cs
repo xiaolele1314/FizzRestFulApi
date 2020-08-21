@@ -39,11 +39,6 @@ namespace Fizz.SalesOrder.Models
         [DefaultValue(0)]
         public int? SortNo { get; set; }
 
-        public static explicit operator OrderDetail(Order v)
-        {
-            throw new NotImplementedException();
-        }
-
         [DefaultValue("")]
         [Column(TypeName = ColumnTypes.NVarchar2000)]
         public string Comment { get; set; }

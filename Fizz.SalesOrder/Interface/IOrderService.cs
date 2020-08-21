@@ -13,7 +13,7 @@ namespace Fizz.SalesOrder.Service
         IActionResult QueryOrder(MultipleGetStyleOption getStyleOption);
         IActionResult QueryOrder(string orderNo);
         IActionResult DeleteOrder(string orderNo);
-        IActionResult UpdateOrder(string orderNo, Order order);
+        IActionResult UpdateOrder(string orderNo, OrderDto orderDto);
 
     }
 }
