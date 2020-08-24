@@ -24,5 +24,7 @@ services:
       update_config:
         failure_action: rollback
         order: start-first
+    ports:
+      - "8888:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASP_ENV:-Nightly}
