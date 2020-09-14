@@ -22,10 +22,10 @@ test:
   only:
     - fizzDev
   variables:
-
+    TEST_PROJECT_PATH: ./XUnitTestProject1/Test.csproj
   script:
-    - echo "${PROJECT_PATH}"
-    - dotnet test PROJECT_PATH
+    - echo "${TEST_PROJECT_PATH}"
+    - dotnet test TEST_PROJECT_PATH
 
 build_src:
   stage: build_src
