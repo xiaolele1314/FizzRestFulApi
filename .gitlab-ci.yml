@@ -24,6 +24,7 @@ test:
   variables:
 
   script:
+    - echo "${PROJECT_PATH}"
     - dotnet test PROJECT_PATH
 
 build_src:
