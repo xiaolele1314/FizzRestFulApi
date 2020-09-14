@@ -6,6 +6,7 @@ variables:
    REGISTRY_HOST: hub.iubang.com:5000
    DEPLOY_TARGET: gitlab-runner@byzan.cxist.com
    STACK_NAME: byz-trials
+   
 stages:
   - test
   - build_src
@@ -15,7 +16,8 @@ stages:
 
 test:
   stage: test
-  tags: dotnet
+  tags: 
+    - dotnet
   only:
     - fizzDev
   script:
