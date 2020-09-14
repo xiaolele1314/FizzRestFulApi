@@ -78,7 +78,7 @@ namespace Fizz.SalesOrder.Service
                 return CommonService.FailResult("未查到此订单");
             }
 
-            return CommonService.SuccessResult(order);
+            return CommonService.SuccessResult("success");
         }
 
         public IActionResult UpdateOrder(string orderNo, OrderDto orderDto)
