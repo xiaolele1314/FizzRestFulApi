@@ -7,10 +7,19 @@ variables:
    DEPLOY_TARGET: gitlab-runner@byzan.cxist.com
    STACK_NAME: byz-trials
 stages:
+  - test
   - build_src
   - build_img
   - push_image
   - deploy
+
+test:
+  stage: test
+  tags: dotnet
+  only:
+    - fizzDev
+  script:
+    - dotnet test PROJECT
 
 build_src:
   stage: build_src

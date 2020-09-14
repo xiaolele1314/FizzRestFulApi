@@ -8,7 +8,7 @@ namespace Fizz.SalesOrder.Service
 {
     public class UserService: IUserService
     {
-        private string UserName { get; set; }
+        private string UserName { get; set; } = "lele";
 
         public string getUser()
         {

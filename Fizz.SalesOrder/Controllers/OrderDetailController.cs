@@ -1,11 +1,6 @@
 ﻿using Fizz.SalesOrder.Models;
 using Fizz.SalesOrder.Service;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Fizz.SalesOrder.Controllers
 {
 

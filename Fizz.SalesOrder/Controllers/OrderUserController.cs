@@ -1,11 +1,5 @@
 ﻿using Fizz.SalesOrder.Interface;
-using Fizz.SalesOrder.Models;
-using Fizz.SalesOrder.Service;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Fizz.SalesOrder.Controllers
 {
@@ -16,7 +10,7 @@ namespace Fizz.SalesOrder.Controllers
     {
         private readonly IOrderUserService _orderUserService;
 
-        public OrderUserController(SalesContext context, IOrderUserService service)
+        public OrderUserController(IOrderUserService service)
         {
             this._orderUserService = service;
         }
@@ -32,7 +26,7 @@ namespace Fizz.SalesOrder.Controllers
         //删除用户下的所有明细
         //DELETE Fizz/DetailUser
         [HttpDelete("DetailUser")]
-        public IActionResult DeletOrdere()
+        public IActionResult DeleteOrderDetail()
         {
             return _orderUserService.DeleteDetailByUser();
         }
@@ -40,7 +34,7 @@ namespace Fizz.SalesOrder.Controllers
         //获取用户下的所有明细
         //GET Fizz/DetailUser
         [HttpGet("DetailUser")]
-        public IActionResult GetDetail([FromQuery] int? pageSize, [FromQuery] int? pageNum)
+        public IActionResult GetOrderDetail([FromQuery] int? pageSize, [FromQuery] int? pageNum)
         {
             return _orderUserService.QueryDetailByUser(pageSize, pageNum);
         }

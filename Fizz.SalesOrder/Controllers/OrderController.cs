@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Fizz.SalesOrder.Models;
 using Fizz.SalesOrder.Service;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Debug;
-using Microsoft.AspNetCore.Http;
-using Fizz.SalesOrder.Interface;
 
 namespace Fizz.SalesOrder.Controllers
 {
@@ -36,7 +28,7 @@ namespace Fizz.SalesOrder.Controllers
         //查询所有订单
         // GET Fizz/SalesOrder/
         [HttpGet("")]
-        public IActionResult Get([FromQuery]MultipleGetStyleOption getStyleOption)
+        public IActionResult Get([FromQuery] MultipleGetStyleOption getStyleOption)
         {
             return _orderService.QueryOrder(getStyleOption);
         }
@@ -53,8 +45,8 @@ namespace Fizz.SalesOrder.Controllers
         // DELETE Fizz/SalesOrder/
         [HttpDelete("{orderNo}")]
         public IActionResult Delete(string orderNo)
-        {         
-           return _orderService.DeleteOrder(orderNo);
+        {
+            return _orderService.DeleteOrder(orderNo);
         }
 
 
@@ -62,11 +54,14 @@ namespace Fizz.SalesOrder.Controllers
         // PUT Fizz/SalesOrder/{orderNo}
         [HttpPut("{orderNo}")]
         public IActionResult Put(string orderNo, [FromBody] OrderDto orderDto)
-        { 
+        {
             return _orderService.UpdateOrder(orderNo, orderDto);
         }
 
-        
+      
+
+
+
     }
-    
+
 }

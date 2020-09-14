@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.Json;
-using System.Threading.Tasks;
 using AutoMapper;
 using Fizz.SalesOrder.Extensions;
-using Fizz.SalesOrder.Interface;
 using Fizz.SalesOrder.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Fizz.SalesOrder.Service
 {
@@ -81,6 +73,11 @@ namespace Fizz.SalesOrder.Service
         {
             var order = _context.orders.AsNoTracking().Where(o => o.No == orderNo).FirstOrDefault();
 
+            if(order == null)
+            {
+                return CommonService.FailResult("未查到此订单");
+            }
+
             return CommonService.SuccessResult(order);
         }
 
@@ -103,12 +100,9 @@ namespace Fizz.SalesOrder.Service
             DateTime now = System.DateTime.Now;
             orderDto.No = orderNo;
 
+            this._mapper.Map(orderDto, order);
 
-            //order.UpdateChangedField<Order>(oldOrder);
-
-            _mapper.Map(orderDto, order);
-
-            var u = _context.orders.Update(order);
+            _context.orders.Update(order);
             _context.SaveChanges();
 
             return CommonService.SuccessResult(order);

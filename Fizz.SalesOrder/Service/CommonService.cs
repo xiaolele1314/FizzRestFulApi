@@ -1,14 +1,5 @@
-﻿using Fizz.SalesOrder.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Fizz.SalesOrder.Service
 {
@@ -24,6 +15,11 @@ namespace Fizz.SalesOrder.Service
         {
             JsonResult result = new JsonResult(value) { StatusCode = StatusCodes.Status400BadRequest };
             return result;
+        }
+
+        public int test(int a)
+        {
+            return a;
         }
     }
 }

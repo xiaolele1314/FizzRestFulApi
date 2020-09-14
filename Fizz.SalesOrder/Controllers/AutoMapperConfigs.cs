@@ -30,7 +30,8 @@ namespace Fizz.SalesOrder.Controllers
                 .ForMember(des => des.MaterialNo, opt => opt.Condition(src => src.MaterialNo != null))
                 .ForMember(des => des.SortNo, opt => opt.Condition(src => src.SortNo != null))
                 .ForMember(des => des.Order, opt => opt.Condition(src => src.Order != null))
-                .ForMember(des => des.Unit, opt => opt.Condition(src => src.Unit != null));
+                .ForMember(des => des.Unit, opt => opt.Condition(src => src.Unit != null))
+                .ForMember(des => des.Amount, opt => opt.Condition(src => src.Amount != null));
                 
 
         }

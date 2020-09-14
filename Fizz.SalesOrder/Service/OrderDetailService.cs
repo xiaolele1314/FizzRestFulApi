@@ -2,13 +2,8 @@
 using Fizz.SalesOrder.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Fizz.SalesOrder.Interface;
-using Renci.SshNet.Messages.Authentication;
 using AutoMapper;
 
 namespace Fizz.SalesOrder.Service
@@ -19,7 +14,7 @@ namespace Fizz.SalesOrder.Service
 
         private readonly IMapper _mapper;
 
-        public OrderDetailService(SalesContext context, IUserService userService, IMapper mapper)
+        public OrderDetailService(SalesContext context,  IMapper mapper)
             :base()
         {
             this._mapper = mapper;
@@ -28,6 +23,9 @@ namespace Fizz.SalesOrder.Service
 
         public IActionResult CreateDetail(OrderDetail detail, string orderNo)
         {
+            //添加销售订单明细
+            detail.OrderNo = orderNo;
+
             if (_context.orders.AsNoTracking().Where(o => o.No == orderNo).Count() == 0)
             {
                 return CommonService.FailResult("销售订单不存在");
@@ -37,8 +35,7 @@ namespace Fizz.SalesOrder.Service
             {
                 return CommonService.FailResult("该订单明细已存在");
             }
-            //添加销售订单明细
-            detail.OrderNo = orderNo;
+            
 
             DateTime now = System.DateTime.Now;
 
@@ -91,8 +88,11 @@ namespace Fizz.SalesOrder.Service
                 .AsNoTracking()
                 .Where(o => o.RowNo == detailNo && o.OrderNo == orderNo)
                 .FirstOrDefault();
-
-            return CommonService.FailResult(order);
+            if(order == null)
+            {
+                return CommonService.FailResult("没有此明细单");
+            }
+            return CommonService.SuccessResult(order);
         }
 
         public IActionResult QueryDetail(string orderNo, int? pageSize, int? pageNum)

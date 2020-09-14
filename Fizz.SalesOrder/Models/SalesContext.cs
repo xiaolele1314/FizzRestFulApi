@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Fizz.SalesOrder.Interface;
@@ -21,7 +18,13 @@ namespace Fizz.SalesOrder.Models
         {
             this.userService = userService;
         }
+        public SalesContext(DbContextOptions<SalesContext> options)
+        : base(options)
+        {
+            
+        }
 
+        
 
         //重写savechanges方法
         public override int SaveChanges()

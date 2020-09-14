@@ -1,15 +1,11 @@
 ﻿using Fizz.SalesOrder.Models;
 using Fizz.SalesOrder.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Fizz.SalesOrder.Extensions
 {
@@ -69,9 +65,18 @@ namespace Fizz.SalesOrder.Extensions
                 //分页查询            
                 source = source.Skip((int)(pageSize * (pageNum - 1))).Take((int)pageSize);
 
+                if(source.Count() == 0)
+                {
+                    return CommonService.FailResult("查询不到数据");
+                }
+
                 pageData = new PageData<T> { PageCount = (int)pageCount, PageNum = pageNum, PageItems = source.ToList() };
             }
-
+            else
+            {
+                return CommonService.FailResult("查询不到数据");
+            }
+            
 
             return CommonService.SuccessResult(pageData);
         }
