@@ -22,8 +22,8 @@ test:
   only:
     - fizzDev
   script:
-    - echo "${SOLUTION_PATH}"
-    - dotnet test SOLUTION_PATH
+    - echo $SOLUTION_PATH
+    - dotnet test $SOLUTION_PATH
 
 build_src:
   stage: build_src
