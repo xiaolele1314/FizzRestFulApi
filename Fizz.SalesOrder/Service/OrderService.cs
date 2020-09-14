@@ -96,7 +96,7 @@ namespace Fizz.SalesOrder.Service
                 return CommonService.FailResult("订单不存在");
             }
 
-            //更新销售订单数据
+            //更新销售订单的数据
             DateTime now = System.DateTime.Now;
             orderDto.No = orderNo;
 
