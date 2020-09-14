@@ -1,12 +1,13 @@
 variables:
-   PROJECT: ./Fizz.SalesOrder.sln
-   PROJECT_NAME: FIZZ_SALES_ORDER
+   SOLUTION_PATH: ./Fizz.SalesOrder.sln
+   PROJECT_PATH: ./Fizz.SalesOrder/Fizz.SalesOrder.csproj
+   SOLUTION_PATH_NAME: FIZZ_SALES_ORDER
    IMAGE_PREFIX: trials/s52
    IMAGE_NAME: ord
    REGISTRY_HOST: hub.iubang.com:5000
    DEPLOY_TARGET: gitlab-runner@byzan.cxist.com
    STACK_NAME: byz-trials
-   
+
 stages:
   - test
   - build_src
@@ -20,8 +21,10 @@ test:
     - dotnet
   only:
     - fizzDev
+  variables:
+
   script:
-    - dotnet test PROJECT
+    - dotnet test PROJECT_PATH
 
 build_src:
   stage: build_src
@@ -36,13 +39,13 @@ build_src:
   script:
     - mkdir -p $PWD/$PUBLISH_DIR
     - echo $PWD/$PUBLISH_DIR
-    - dotnet publish -v q $PROJECT -c Release -o $PWD/$PUBLISH_DIR --version-suffix 1.0
+    - dotnet publish -v q $SOLUTION_PATH -c Release -o $PWD/$PUBLISH_DIR --version-suffix 1.0
     - cp -r tools/CI/Dockerfile $PUBLISH_DIR
-    - tar -cz -f $PROJECT_NAME.tar.gz -C $PUBLISH_DIR .
+    - tar -cz -f $SOLUTION_PATH_NAME.tar.gz -C $PUBLISH_DIR .
   artifacts:
-    name: "$PROJECT_NAME"
+    name: "$SOLUTION_PATH_NAME"
     paths:
-      - $PROJECT_NAME.tar.gz
+      - $SOLUTION_PATH_NAME.tar.gz
 
 build_image:
   stage: build_img
@@ -58,7 +61,7 @@ build_image:
   script:
     - mkdir -p $DOCKER_BUILD_DIR
     - IMAGE_FULL_NAME=$IMAGE_PREFIX/$IMAGE_NAME:$IMAGE_TAG
-    - tar -xzf $PROJECT_NAME.tar.gz -C $DOCKER_BUILD_DIR
+    - tar -xzf $SOLUTION_PATH_NAME.tar.gz -C $DOCKER_BUILD_DIR
     - docker build --tag $IMAGE_FULL_NAME $DOCKER_BUILD_DIR
   dependencies:
     - build_src
