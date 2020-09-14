@@ -22,7 +22,7 @@ services:
       mode: replicated 
       replicas: ${REPLICA:-2}
       update_config:
-        failure_action: rollback
+        failure_action: continue
         order: start-first
     ports:
       - "8888:80"
